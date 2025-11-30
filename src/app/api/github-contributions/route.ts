@@ -24,6 +24,8 @@ const CONTRIBUTION_QUERY = `
   }
 `;
 
+export const revalidate = 300; // Cache for 5 minutes
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const username = searchParams.get("username");
@@ -59,7 +61,7 @@ export async function GET(request: Request) {
           to: today.toISOString(),
         },
       }),
-      cache: "no-store",
+      next: { revalidate: 300 }, // Cache for 5 minutes
     });
 
     if (!ghResponse.ok) {

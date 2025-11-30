@@ -40,7 +40,7 @@ export default function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-3 sm:px-4 pointer-events-none">
       <nav
         className={cn(
-          "w-full max-w-2xl h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between rounded-2xl pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "w-full max-w-2xl h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between rounded-2xl pointer-events-auto transition-all duration-500 ease-expo-out",
           isFloating
             ? "border border-border/60 bg-background/75 backdrop-blur-xl shadow-lg shadow-foreground/10"
             : "border border-transparent bg-background/0 backdrop-blur-0"

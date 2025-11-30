@@ -14,11 +14,14 @@
     "@radix-ui/react-separator": "^1.1.4",
     "@radix-ui/react-slot": "^1.2.0",
     "@radix-ui/react-tooltip": "^1.2.3",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
     "@types/mdx": "^2.0.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
     "gray-matter": "^2.0.1",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.555.0",
     "motion": "^12.7.4",
     "next": "^16.0.5",
@@ -36,6 +39,7 @@
     "shiki": "^1.29.2",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.181.2",
     "unified": "^11.0.5"
   },
   "devDependencies": {
@@ -44,7 +48,7 @@
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
     "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.4",
+    "eslint-config-next": "^16.0.5",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"

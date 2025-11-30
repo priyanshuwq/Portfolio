@@ -145,3 +145,14 @@ code[data-line-numbers-max-digits="2"] > [data-line]::before {
 code[data-line-numbers-max-digits="3"] > [data-line]::before {
   width: 3rem;
 }
+/* Black Hole Canvas Optimization */
+canvas {
+  display: block;
+  outline: none;
+}
+
+/* Smooth blending for hero section */
+#hero {
+  position: relative;
+  isolation: isolate;
+}
