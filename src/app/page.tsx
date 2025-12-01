@@ -32,7 +32,7 @@ export default function Page() {
         <div className="mx-auto w-full max-w-2xl">
           {/* Banner Image - Touches navbar, full width */}
           <BlurFade delay={BLUR_FADE_DELAY}>
-            <div className="relative w-full h-48 sm:h-56 md:h-64 -mx-6 -mt-12 sm:-mt-24 overflow-hidden">
+            <div className="relative w-full h-48 sm:h-56 md:h-64 overflow-hidden rounded-2xl">
               <Image
                 src="/Banner.jpeg"
                 alt="Profile Banner"
@@ -46,7 +46,7 @@ export default function Page() {
           </BlurFade>
 
           {/* Profile Section - Social Media Style */}
-          <div className="relative px-6 sm:px-0">
+          <div className="relative px-0">
             {/* Avatar and Info Container */}
             <div className="flex items-end justify-between -mt-16 sm:-mt-20">
               {/* Left Side - Avatar, Name, Designation */}
@@ -216,6 +216,7 @@ export default function Page() {
                   image={project.image}
                   video={project.video}
                   links={project.links}
+                  active={project.active}
                 />
               </BlurFade>
             ))}
@@ -252,10 +253,9 @@ export default function Page() {
             {DATA.skills.map((skill, id) => (
               <BlurFade key={skill} delay={BLUR_FADE_DELAY * 15 + id * 0.05}>
                 <div
-                  className="group relative flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-muted via-muted/80 to-muted/60 hover:from-primary/10 hover:via-primary/5 hover:to-transparent transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                  className="group relative flex items-center justify-center w-14 h-14 transition-all duration-300 hover:scale-110"
                   title={skill}
                 >
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/0 via-white/5 to-white/10 dark:from-white/5 dark:via-white/0 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <SkillIcon skill={skill} />
                 </div>
               </BlurFade>

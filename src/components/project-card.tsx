@@ -27,6 +27,7 @@ interface Props {
     href: string;
   }[];
   className?: string;
+  active?: boolean;
 }
 
 // Tech icon mapper
@@ -34,7 +35,7 @@ const TechIcon = ({ tech }: { tech: string }) => {
   const iconProps = { className: "size-5" };
   
   // Normalize the tech name for matching
-  const normalizedTech = tech.toLowerCase().replace(/\s+/g, '').replace('.', '');
+  const normalizedTech = tech.toLowerCase().replace(/\s+/g, '').replace(/\./g, '');
   
   switch (normalizedTech) {
     case "react":
@@ -68,6 +69,8 @@ const TechIcon = ({ tech }: { tech: string }) => {
       return <Icons.render {...iconProps} />;
     case "socketio":
       return <Icons.socketio {...iconProps} />;
+    case "vercel":
+      return <Icons.vercel {...iconProps} />;
     case "shadcnui":
       return (
         <svg viewBox="0 0 256 256" {...iconProps}>
@@ -89,7 +92,15 @@ const TechIcon = ({ tech }: { tech: string }) => {
         </svg>
       );
     default:
-      return null;
+      // Return a default placeholder or null
+      return (
+        <div className={iconProps.className} title={tech}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+      );
   }
 };
 
@@ -104,16 +115,17 @@ export function ProjectCard({
   video,
   links,
   className,
+  active = true,
 }: Props) {
   return (
     <Card
       className={
-        "flex flex-col overflow-hidden border hover:shadow-lg transition-all duration-300 ease-out h-full bg-card"
+        "group flex flex-col overflow-hidden border border-border/50 hover:border-border hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 ease-out h-full bg-card/50 backdrop-blur-sm"
       }
     >
-      {/* Non-clickable image/video */}
-      <div className={cn("block cursor-default overflow-hidden", className)}>
-        <div className="relative w-full aspect-video overflow-hidden bg-muted">
+      {/* Image/Video Container */}
+      <div className={cn("block cursor-default overflow-hidden relative", className)}>
+        <div className="relative w-full aspect-video overflow-hidden bg-gradient-to-br from-muted/80 to-muted/40">
           {video && (
             <video
               src={video}
@@ -121,7 +133,7 @@ export function ProjectCard({
               loop
               muted
               playsInline
-              className="pointer-events-none absolute inset-0 w-full h-full object-cover object-center"
+              className="pointer-events-none absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
             />
           )}
           {image && (
@@ -130,26 +142,39 @@ export function ProjectCard({
               alt={title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-cover object-center"
+              className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
               quality={90}
               priority={false}
             />
           )}
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
         </div>
       </div>
-      <CardHeader className="px-4 pt-4 pb-3">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between gap-3">
-            <CardTitle className="text-lg font-semibold flex-1">{title}</CardTitle>
+      
+      <CardHeader className="px-5 pt-5 pb-3 space-y-3">
+        <div className="flex items-start justify-between gap-3">
+          <CardTitle className="text-xl font-bold flex-1 leading-tight tracking-tight group-hover:text-primary transition-colors duration-300">
+            {title}
+          </CardTitle>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {active && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-sm">
+                <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/50" />
+                <span className="text-[10px] font-semibold tracking-wide uppercase text-emerald-700 dark:text-emerald-400">
+                  Live
+                </span>
+              </div>
+            )}
             {links && links.length > 0 && (
-              <div className="flex items-center gap-3 flex-shrink-0">
+              <div className="flex items-center gap-1.5">
                 {links?.map((link, idx) => (
                   <Link 
                     href={link?.href} 
                     key={idx} 
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200"
                   >
                     {link.icon}
                   </Link>
@@ -157,20 +182,21 @@ export function ProjectCard({
               </div>
             )}
           </div>
-          <Markdown className="prose prose-sm max-w-full text-pretty font-sans text-muted-foreground dark:prose-invert line-clamp-2">
-            {description}
-          </Markdown>
         </div>
+        <Markdown className="prose prose-sm max-w-full text-pretty font-sans text-muted-foreground/90 dark:prose-invert line-clamp-3 leading-relaxed">
+          {description}
+        </Markdown>
       </CardHeader>
-      <CardContent className="px-4 pb-4 mt-auto">
+      
+      <CardContent className="px-5 pb-5 mt-auto space-y-4">
         {tags && tags.length > 0 && (
           <div>
             <p className="text-xs text-muted-foreground mb-2">Technologies</p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {tags?.map((tag) => (
                 <div
                   key={tag}
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center transition-all duration-300 hover:scale-110"
                   title={tag}
                 >
                   <TechIcon tech={tag} />
@@ -180,9 +206,23 @@ export function ProjectCard({
           </div>
         )}
         {dates && (
-          <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground">
-            <div className="size-1.5 rounded-full bg-green-500" />
-            <span>{dates}</span>
+          <div className="flex items-center gap-2 pt-2 border-t border-border/30">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-3.5 text-muted-foreground/70"
+            >
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+              <line x1="16" x2="16" y1="2" y2="6" />
+              <line x1="8" x2="8" y1="2" y2="6" />
+              <line x1="3" x2="21" y1="10" y2="10" />
+            </svg>
+            <span className="text-xs text-muted-foreground/80 font-medium">{dates}</span>
           </div>
         )}
       </CardContent>
