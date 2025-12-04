@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     title: `${DATA.name}`,
     card: "summary_large_image",
   },
+  icons: {
+    icon: DATA.avatarUrl,
+  },
 };
 
 export default function RootLayout({
