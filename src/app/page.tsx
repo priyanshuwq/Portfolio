@@ -291,6 +291,20 @@ export default function Page() {
             ))}
           </div>
         </div>
+        <BlurFade delay={BLUR_FADE_DELAY * 15.5}>
+          <div className="mt-8 rounded-xl overflow-hidden border border-black/10 dark:border-white/10 shadow-lg">
+            <iframe
+              src="https://open.spotify.com/embed/playlist/62767ucbiIBcDMOIxSNwjB?utm_source=generator&theme=0"
+              width="100%"
+              height="152"
+              frameBorder="0"
+              allowFullScreen
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+              style={{ borderRadius: '12px' }}
+            />
+          </div>
+        </BlurFade>
       </section>
       <section id="contact">
         <div className="flex flex-col gap-4 w-full py-12">
