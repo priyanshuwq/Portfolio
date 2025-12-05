@@ -19,6 +19,7 @@ type ContributionDay = {
 interface GitHubContributionsProps {
   username: string;
   className?: string;
+  onTotalLoad?: (total: number) => void;
 }
 
 const githubTheme = {
@@ -66,7 +67,7 @@ const mapToCalendarData = (days: ContributionDay[]): Activity[] => {
   }));
 };
 
-export function GitHubContributions({ username, className }: GitHubContributionsProps) {
+export function GitHubContributions({ username, className, onTotalLoad }: GitHubContributionsProps) {
   const { resolvedTheme } = useTheme();
   const [days, setDays] = useState<ContributionDay[]>([]);
   const [total, setTotal] = useState<number>(0);
@@ -88,7 +89,11 @@ export function GitHubContributions({ username, className }: GitHubContributions
         const data = await res.json();
         const filteredValues = filterCommittedMonths(data.values ?? []);
         setDays(filteredValues);
-        setTotal(data.total ?? 0);
+        const totalCount = data.total ?? 0;
+        setTotal(totalCount);
+        if (onTotalLoad) {
+          onTotalLoad(totalCount);
+        }
       } catch (err) {
         setError("Unable to load contributions right now.");
         console.error(err);
@@ -98,7 +103,7 @@ export function GitHubContributions({ username, className }: GitHubContributions
     };
 
     fetchData();
-  }, [username]);
+  }, [username, onTotalLoad]);
 
   const updateScale = () => {
     if (!containerRef.current || !calendarRef.current) return;
@@ -133,17 +138,10 @@ export function GitHubContributions({ username, className }: GitHubContributions
   return (
     <section className={className}>
       <div className="space-y-4">
-        <div>
-          {/* <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground">Open Source</p> */}
-          <h2 className="text-3xl font-bold">GitHub Contributions</h2>
-          <p className="text-muted-foreground">
-            A snapshot of the past year of commits and green squares.
-          </p>
-        </div>
 
         <div
           ref={containerRef}
-          className="relative w-full overflow-x-auto overflow-y-hidden rounded-2xl border bg-card/60 p-4"
+          className="relative w-full overflow-hidden rounded-lg border bg-card p-4"
         >
           <style>{`
             .react-activity-calendar__scroll-container {
@@ -154,7 +152,10 @@ export function GitHubContributions({ username, className }: GitHubContributions
             }
             @media (max-width: 640px) {
               .react-activity-calendar text {
-                font-size: 10px !important;
+                font-size: 9px !important;
+              }
+              .react-activity-calendar {
+                font-size: 11px !important;
               }
             }
           `}</style>
@@ -204,10 +205,6 @@ export function GitHubContributions({ username, className }: GitHubContributions
                   }}
                 />
               </div>
-              <p className="mt-4 text-sm text-muted-foreground">
-                Total contributions: {" "} 
-                <span className="font-semibold text-foreground">{total}</span>
-              </p>
             </motion.div>
           )}
           {!isLoading && !error && calendarData.length === 0 && (
