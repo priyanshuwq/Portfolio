@@ -19,6 +19,11 @@ const CONTRIBUTION_QUERY = `
             }
           }
         }
+        totalCommitContributions
+        totalIssueContributions
+        totalPullRequestContributions
+        totalPullRequestReviewContributions
+        restrictedContributionsCount
       }
     }
   }
@@ -70,8 +75,8 @@ export async function GET(request: Request) {
     }
 
     const payload = await ghResponse.json();
-    const calendar =
-      payload?.data?.user?.contributionsCollection?.contributionCalendar;
+    const contributionsCollection = payload?.data?.user?.contributionsCollection;
+    const calendar = contributionsCollection?.contributionCalendar;
 
     if (!calendar) {
       throw new Error("Unable to read contribution data from GitHub response.");
@@ -85,9 +90,21 @@ export async function GET(request: Request) {
         }))
       ) ?? [];
 
+    // GitHub's contribution calendar includes more than just commits/issues/PRs
+    // It also counts: discussions, repositories created, etc.
+    // Use totalContributions from the calendar as it matches the profile display
+    const totalFromCalendar = calendar.totalContributions ?? 0;
+    
+    // Get individual contribution types for breakdown
+    const commits = contributionsCollection.totalCommitContributions ?? 0;
+    const issues = contributionsCollection.totalIssueContributions ?? 0;
+    const prs = contributionsCollection.totalPullRequestContributions ?? 0;
+    const reviews = contributionsCollection.totalPullRequestReviewContributions ?? 0;
+
     return NextResponse.json({
       values,
-      total: calendar.totalContributions ?? 0,
+      total: totalFromCalendar, // Use calendar total as it matches GitHub profile
+      breakdown: { commits, issues, prs, reviews, calendarTotal: totalFromCalendar },
     });
   } catch (error) {
     console.error("[github-contributions]", error);
