@@ -378,7 +378,7 @@ export const createAnimation = (
       name: `${variant}-${start}${blur ? '-blur' : ''}`,
       css: `
        ::view-transition-group(root) {
-        animation-duration: 0.7s;
+        animation-duration: 1.5s;
         animation-timing-function: var(--expo-out);
       }
             
@@ -428,13 +428,13 @@ export const createAnimation = (
       name: `${variant}-${start}${blur ? '-blur' : ''}`,
       css: `
        ::view-transition-group(root) {
-        animation-duration: 1.2s;
+        animation-duration: 1.8s;
         animation-timing-function: var(--expo-out);
       }
             
       ::view-transition-new(root) {
-        animation-name: reveal-light${blur ? '-blur' : ''};
-        ${blur ? 'filter: blur(2px);' : ''}
+        animation-name: reveal-light-blur;
+        filter: blur(4px);
       }
 
       ::view-transition-old(root),
@@ -443,31 +443,31 @@ export const createAnimation = (
         z-index: -1;
       }
       .dark::view-transition-new(root) {
-        animation-name: reveal-dark${blur ? '-blur' : ''};
-        ${blur ? 'filter: blur(2px);' : ''}
+        animation-name: reveal-dark-blur;
+        filter: blur(4px);
       }
 
-      @keyframes reveal-dark${blur ? '-blur' : ''} {
+      @keyframes reveal-dark-blur {
         from {
           clip-path: circle(0% at ${animationOrigin});
-          ${blur ? 'filter: blur(8px);' : ''}
+          filter: blur(12px);
         }
-        ${blur ? '50% { filter: blur(4px); }' : ''}
+        50% { filter: blur(6px); }
         to {
           clip-path: circle(150% at ${animationOrigin});
-          ${blur ? 'filter: blur(0px);' : ''}
+          filter: blur(0px);
         }
       }
 
-      @keyframes reveal-light${blur ? '-blur' : ''} {
+      @keyframes reveal-light-blur {
         from {
            clip-path: circle(0% at ${animationOrigin});
-           ${blur ? 'filter: blur(8px);' : ''}
+           filter: blur(12px);
         }
-        ${blur ? '50% { filter: blur(4px); }' : ''}
+        50% { filter: blur(6px); }
         to {
           clip-path: circle(150% at ${animationOrigin});
-          ${blur ? 'filter: blur(0px);' : ''}
+          filter: blur(0px);
         }
       }
       `,
