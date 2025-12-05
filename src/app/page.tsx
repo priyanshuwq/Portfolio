@@ -6,6 +6,12 @@ import { ProjectCard } from "@/components/project-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
 import { FileText, Send } from "lucide-react";
 import Link from "next/link";
@@ -25,6 +31,8 @@ export default function Page() {
   const githubUsername =
     DATA.contact.social?.GitHub?.url?.split("github.com/")[1]?.replace(/\/.*/, "") ||
     "priyanshuwq";
+
+  const [githubTotal, setGithubTotal] = React.useState<number | null>(null);
 
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-16">
@@ -86,35 +94,50 @@ export default function Page() {
 
               {/* Social Icons */}
               <BlurFade delay={BLUR_FADE_DELAY * 2.5}>
-                <div className="flex flex-row gap-0 -mr-2">
-                  {Object.entries(DATA.contact.social)
-                    .filter(([_, social]) => social.navbar)
-                    .map(([name, social]) => (
-                      <Link
-                        key={name}
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button variant="ghost" size="icon" className="size-8 rounded-lg hover:bg-muted">
-                          {React.createElement(social.icon, {
-                            className: "size-4",
-                          })}
-                        </Button>
-                      </Link>
-                    ))}
-                  <Link
-                    href={`mailto:${DATA.contact.email}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button variant="ghost" size="icon" className="size-8 rounded-lg hover:bg-muted">
-                      {React.createElement(DATA.contact.social.email.icon, {
-                        className: "size-4",
-                      })}
-                    </Button>
-                  </Link>
-                </div>
+                <TooltipProvider>
+                  <div className="flex flex-row gap-0 -mr-2">
+                    {Object.entries(DATA.contact.social)
+                      .filter(([_, social]) => social.navbar)
+                      .map(([name, social]) => (
+                        <Tooltip key={name}>
+                          <TooltipTrigger asChild>
+                            <Link
+                              href={social.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button variant="ghost" size="icon" className="size-8 rounded-lg hover:bg-muted">
+                                {React.createElement(social.icon, {
+                                  className: "size-4",
+                                })}
+                              </Button>
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-white text-black border border-gray-200 shadow-lg">
+                            <p className="font-medium">{name}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      ))}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link
+                          href={`mailto:${DATA.contact.email}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="ghost" size="icon" className="size-8 rounded-lg hover:bg-muted">
+                            {React.createElement(DATA.contact.social.email.icon, {
+                              className: "size-4",
+                            })}
+                          </Button>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-white text-black border border-gray-200 shadow-lg">
+                        <p className="font-medium">Email</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </TooltipProvider>
               </BlurFade>
             </div>
 
@@ -189,7 +212,7 @@ export default function Page() {
                       Resume / CV
                     </Button>
                   </Link>
-                  <Link href="#contact">
+                  <Link href="/contact">
                     <Button className="gap-2 h-9 text-sm">
                       <Send className="size-3.5" />
                       Contact
@@ -252,47 +275,99 @@ export default function Page() {
           </BlurFade>
         </div>
       </section>
-      <section id="github">
-        <BlurFade delay={BLUR_FADE_DELAY * 13}>
-          <Suspense fallback={
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-3xl font-bold">GitHub Contributions</h2>
-                <p className="text-muted-foreground">
-                  A snapshot of the past year of commits and green squares.
-                </p>
+
+      {/* About Section */}
+      <section id="about">
+        <div className="space-y-8 w-full py-12">
+          <BlurFade delay={BLUR_FADE_DELAY * 13.5}>
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-muted-foreground">About</h3>
+              <h2 className="text-4xl font-bold">Me</h2>
+            </div>
+          </BlurFade>
+
+          <BlurFade delay={BLUR_FADE_DELAY * 14}>
+            <div className="flex flex-col md:flex-row gap-8 items-start max-w-[800px] mx-auto">
+              {/* Profile Image */}
+              <div className="shrink-0">
+                <div className="w-48 h-48 rounded-lg overflow-hidden bg-primary">
+                  <Avatar className="w-full h-full rounded-lg">
+                    <AvatarImage alt="Priyanshu Shekhar Singh" src={DATA.avatarUrl} className="object-cover" />
+                    <AvatarFallback className="rounded-lg text-4xl">PSS</AvatarFallback>
+                  </Avatar>
+                </div>
               </div>
-              <div className="relative w-full overflow-x-auto overflow-y-hidden rounded-2xl border bg-card/60 p-4">
-                <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
-                  Loading contribution data…
+
+              {/* Info */}
+              <div className="flex-1 space-y-4">
+                <div>
+                  <h3 className="text-2xl font-bold mb-2">Priyanshu Shekhar Singh</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    I'm a Full Stack web developer and Open Source Contributor, I love building products to solve real-world problems. I'm specialized in building MVP's.
+                  </p>
+                </div>
+
+                {/* Skills */}
+                <div>
+                  <h4 className="text-sm font-semibold mb-3">Skills</h4>
+                  <TooltipProvider>
+                    <div className="flex flex-wrap gap-2">
+                      {DATA.skills.slice(0, 6).map((skill) => (
+                        <Tooltip key={skill}>
+                          <TooltipTrigger asChild>
+                            <div className="group relative flex items-center justify-center w-5 h-5 transition-all duration-300 hover:scale-110 cursor-pointer">
+                              <SkillIcon skill={skill} />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-white text-black border border-gray-200 shadow-lg">
+                            <p className="font-medium">{skill}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      ))}
+                    </div>
+                  </TooltipProvider>
                 </div>
               </div>
             </div>
+          </BlurFade>
+        </div>
+      </section>
+
+      <section id="github">
+        <div className="space-y-3 w-full py-1">
+          <BlurFade delay={BLUR_FADE_DELAY * 15}>
+            <div className="space-y-1">
+              <div>
+                <h3 className="text-sm font-medium text-muted-foreground">Featured</h3>
+                <h2 className="text-xl font-bold">GitHub Activity</h2>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Total: <span className="font-semibold text-foreground">{githubTotal ?? '...'}</span> contributions
+              </div>
+            </div>
+          </BlurFade>
+        <BlurFade delay={BLUR_FADE_DELAY * 16}>
+          <Suspense fallback={
+            <div className="relative w-full overflow-x-auto overflow-y-hidden rounded-lg border bg-card p-4">
+              <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">
+                Loading contribution data…
+              </div>
+            </div>
           }>
-            <GitHubContributions username={githubUsername} />
+            <GitHubContributions username={githubUsername} onTotalLoad={setGithubTotal} />
           </Suspense>
         </BlurFade>
-      </section>
-      <section id="skills">
-        <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 14}>
-            <h2 className="text-xl font-bold">Skills</h2>
-          </BlurFade>
-          <div className="flex flex-wrap gap-3">
-            {DATA.skills.map((skill, id) => (
-              <BlurFade key={skill} delay={BLUR_FADE_DELAY * 15 + id * 0.05}>
-                <div
-                  className="group relative flex items-center justify-center w-14 h-14 transition-all duration-300 hover:scale-110"
-                  title={skill}
-                >
-                  <SkillIcon skill={skill} />
-                </div>
-              </BlurFade>
-            ))}
-          </div>
         </div>
-        <BlurFade delay={BLUR_FADE_DELAY * 15.5}>
-          <div className="mt-8 rounded-xl overflow-hidden border border-black/10 dark:border-white/10 shadow-lg">
+      </section>
+      
+      {/* Spotify Playlist */}
+      <section id="spotify">
+        <div className="w-full py-1">
+          <BlurFade delay={BLUR_FADE_DELAY * 17}>
+            <h2 className="text-xl font-bold mb-4">Playlist</h2>
+          </BlurFade>
+          <BlurFade delay={BLUR_FADE_DELAY * 17.5}>
+          <div className="rounded-xl overflow-hidden border border-border shadow-lg">
             <iframe
               src="https://open.spotify.com/embed/playlist/62767ucbiIBcDMOIxSNwjB?utm_source=generator&theme=0"
               width="100%"
@@ -304,98 +379,6 @@ export default function Page() {
               style={{ borderRadius: '12px' }}
             />
           </div>
-        </BlurFade>
-      </section>
-      <section id="contact">
-        <div className="flex flex-col gap-4 w-full py-12">
-          <BlurFade delay={BLUR_FADE_DELAY * 16}>
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold">Contact</h2>
-              <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Get in touch with me. I will get back to you as soon as possible.
-              </p>
-            </div>
-          </BlurFade>
-          
-          <BlurFade delay={BLUR_FADE_DELAY * 17}>
-            <div className="border-t border-border pt-8 mt-4">
-              <div className="space-y-3 mb-6">
-                <h3 className="text-xl font-bold">Send me a message</h3>
-                <p className="text-sm text-muted-foreground">
-                  Fill out the form below and I will get back to you as soon as possible.
-                </p>
-              </div>
-              
-              <Card className="p-6 border-2">
-                <form 
-                  action={`mailto:${DATA.contact.email}`}
-                  method="post"
-                  encType="text/plain"
-                  className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label 
-                        htmlFor="name" 
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Name <span className="text-destructive">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="Your full name"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <label 
-                        htmlFor="email" 
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Email <span className="text-destructive">*</span>
-                      </label>
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        placeholder="your.email@example.com"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label 
-                      htmlFor="message" 
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Message <span className="text-destructive">*</span>
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={6}
-                      placeholder="Tell me about your project or just say hello..."
-                      className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
-                    />
-                  </div>
-                  
-                  <Button 
-                    type="submit" 
-                    className="gap-2"
-                  >
-                    <Send className="size-4" />
-                    Send Message
-                  </Button>
-                </form>
-              </Card>
-            </div>
           </BlurFade>
         </div>
       </section>
