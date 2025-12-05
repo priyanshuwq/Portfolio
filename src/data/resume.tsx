@@ -75,6 +75,7 @@ export const DATA = {
         "TailwindCSS",
         "nodejs",
         "clerk",
+        "webrtc",
       ],
       links: [
         {
@@ -129,9 +130,10 @@ export const DATA = {
       description:
       "A website that showcase the porsche 911 car model with stunning visuals and interactive features.",
       technologies: [
-        "React",
-        "Javascript",
-        "nodejs",
+        "Three.js",
+        "GSAP",
+        "JavaScript",
+        "Node.js",
         "TailwindCSS",
       ],
       links: [],

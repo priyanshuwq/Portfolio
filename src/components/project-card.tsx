@@ -77,6 +77,10 @@ const TechIcon = ({ tech }: { tech: string }) => {
       return <Icons.socketio {...iconProps} />;
     case "vercel":
       return <Icons.vercel {...iconProps} />;
+    case "threejs":
+      return <Icons.threejs {...iconProps} />;
+    case "gsap":
+      return <Icons.gsap {...iconProps} />;
     case "shadcnui":
       return (
         <svg viewBox="0 0 256 256" {...iconProps}>

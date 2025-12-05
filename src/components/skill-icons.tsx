@@ -95,6 +95,10 @@ export const SkillIcon = ({ skill, className = "size-8 drop-shadow-sm group-hove
           <path d="M97.637 121.69c27.327-22.326 54.058-45.426 81.98-67.097-14.646 22.505-29.708 44.711-44.354 67.215-12.562.06-25.123.06-37.626-.118zM120.737 134.132c12.621 0 25.183 0 37.745.059-27.505 22.326-54.655 45.307-82.099 67.216 14.646-22.505 29.708-44.77 44.354-67.275z" fill="#010101"/>
         </svg>
       );
+    case "Three.js":
+      return <Icons.threejs {...iconProps} />;
+    case "GSAP":
+      return <Icons.gsap {...iconProps} />;
     default:
       return null;
   }
