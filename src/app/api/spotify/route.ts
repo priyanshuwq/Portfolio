@@ -14,28 +14,35 @@ export async function GET() {
     if (response.status === 204 || response.status > 400) {
       console.log('❌ Nothing currently playing, fetching recently played...');
       
-      const recentResponse = await getRecentlyPlayed();
-      
-      if (recentResponse.status === 200) {
-        const recentData = await recentResponse.json();
+      try {
+        const recentResponse = await getRecentlyPlayed();
         
-        if (recentData.items && recentData.items.length > 0) {
-          const track = recentData.items[0].track;
+        if (recentResponse.status === 200) {
+          const recentData = await recentResponse.json();
           
-          return NextResponse.json({
-            album: track.album.name,
-            albumImageUrl: track.album.images[0].url,
-            artist: track.artists.map((artist: any) => artist.name).join(', '),
-            isPlaying: false,
-            songUrl: track.external_urls.spotify,
-            title: track.name,
-            playedAt: recentData.items[0].played_at,
-            progress: 0,
-            duration: track.duration_ms,
-          });
+          if (recentData.items && recentData.items.length > 0) {
+            const track = recentData.items[0].track;
+            
+            console.log('✅ Recently played:', track.name, 'by', track.artists[0].name);
+            
+            return NextResponse.json({
+              album: track.album.name,
+              albumImageUrl: track.album.images[0].url,
+              artist: track.artists.map((artist: any) => artist.name).join(', '),
+              isPlaying: false,
+              songUrl: track.external_urls.spotify,
+              title: track.name,
+              playedAt: recentData.items[0].played_at,
+              progress: 0,
+              duration: track.duration_ms,
+            });
+          }
         }
+      } catch (error) {
+        console.error('Error fetching recently played:', error);
       }
       
+      console.log('❌ No recently played tracks found');
       return NextResponse.json({ isPlaying: false });
     }
 
