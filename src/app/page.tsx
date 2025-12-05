@@ -38,9 +38,9 @@ export default function Page() {
     <main className="flex flex-col min-h-[100dvh] space-y-16">
       <section id="hero">
         <div className="mx-auto w-full max-w-2xl">
-          {/* Banner Image with Overlay Text */}
+          {/* Banner Image with Overlay Text - Hidden on mobile */}
           <BlurFade delay={BLUR_FADE_DELAY}>
-            <div className="relative w-full h-50 sm:h-60 md:h-70 overflow-hidden bg-muted">
+            <div className="relative w-full h-40 sm:h-60 md:h-70 overflow-hidden bg-muted">
               <Image
                 src="/Banner.jpeg"
                 alt="Profile Banner"
@@ -53,7 +53,7 @@ export default function Page() {
               
               {/* Lock In Text Overlay */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <h2 className="text-5xl sm:text-6xl md:text-7xl font-serif font-light tracking-wide text-white/30 mix-blend-soft-light">
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-serif font-light tracking-wide text-white/30 mix-blend-soft-light">
                   Lock In
                 </h2>
               </div>
@@ -64,8 +64,8 @@ export default function Page() {
           <div className="relative mx-auto w-full max-w-2xl px-4 sm:px-6">
             {/* Avatar */}
             <BlurFade delay={BLUR_FADE_DELAY * 1.5}>
-              <div className="-mt-12 sm:-mt-16 mb-4">
-                <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-background shadow-xl">
+              <div className="-mt-8 sm:-mt-16 mb-4">
+                <Avatar className="w-20 h-20 sm:w-32 sm:h-32 border-4 border-background shadow-xl">
                   <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
                   <AvatarFallback>
                     {DATA.name

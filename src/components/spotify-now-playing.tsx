@@ -71,11 +71,43 @@ export function SpotifyNowPlaying() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  if (loading) return null;
-  if (!data?.title) return null;
+  // Show loading state instead of hiding completely
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col gap-2 mt-4 w-full"
+      >
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <FaSpotify className="size-3 text-[#1DB954]" />
+          <span className="font-medium">Loading...</span>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // Always show widget, even if no data
+  if (!data?.title) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col gap-2 mt-4 w-full"
+      >
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <FaSpotify className="size-3 text-[#1DB954]" />
+          <span className="font-medium">Not Playing</span>
+        </div>
+      </motion.div>
+    );
+  }
 
   const statusText = data.isPlaying ? "Now Playing" : "Last Played";
   const progressPercent = data.duration ? (currentProgress / data.duration) * 100 : 0;
+  const showProgress = data.isPlaying && data.duration; // Only show progress bar when playing
 
   return (
     <motion.div
@@ -117,23 +149,25 @@ export function SpotifyNowPlaying() {
           </div>
         </div>
         
-        {/* Progress Bar with Time */}
-        <div className="flex flex-col gap-1">
-          <div className="relative w-full h-1 bg-black/10 dark:bg-white/10 rounded-full overflow-visible group/progress">
-            <div 
-              className="h-full bg-white dark:bg-white rounded-full transition-all duration-300 relative"
-              style={{ width: `${Math.min(progressPercent, 100)}%` }}
-            >
-              {/* Progress Dot */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 size-3 bg-white dark:bg-white rounded-full shadow-md opacity-0 group-hover/progress:opacity-100 transition-opacity" />
+        {/* Progress Bar with Time - Only show when playing */}
+        {showProgress && (
+          <div className="flex flex-col gap-1">
+            <div className="relative w-full h-1 bg-black/10 dark:bg-white/10 rounded-full overflow-visible group/progress">
+              <div 
+                className="h-full bg-white dark:bg-white rounded-full transition-all duration-300 relative"
+                style={{ width: `${Math.min(progressPercent, 100)}%` }}
+              >
+                {/* Progress Dot */}
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 size-3 bg-white dark:bg-white rounded-full shadow-md opacity-0 group-hover/progress:opacity-100 transition-opacity" />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between text-[10px] text-muted-foreground/70">
+              <span>{data.duration ? formatTime(currentProgress) : '0:00'}</span>
+              <span>{data.duration ? formatTime(data.duration) : '0:00'}</span>
             </div>
           </div>
-          
-          <div className="flex items-center justify-between text-[10px] text-muted-foreground/70">
-            <span>{data.duration ? formatTime(currentProgress) : '0:00'}</span>
-            <span>{data.duration ? formatTime(data.duration) : '0:00'}</span>
-          </div>
-        </div>
+        )}
       </Link>
     </motion.div>
   );

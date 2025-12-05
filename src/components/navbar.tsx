@@ -15,19 +15,19 @@ export default function Navbar() {
       <nav
         className="w-full max-w-2xl h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between pointer-events-auto bg-background/70 backdrop-blur-sm border-b border-border/40"
       >
-        {/* Logo/Name */}
-        <Link href="/" className="font-bold text-lg tracking-tight hover:text-foreground/80 transition-colors">
+        {/* Logo/Name - Responsive text size */}
+        <Link href="/" className="font-bold text-base sm:text-lg tracking-tight hover:text-foreground/80 transition-colors">
           {DATA.name}
         </Link>
 
         {/* Nav Links */}
-        <div className="flex items-center gap-6">
-          <ul className="hidden sm:flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-6">
+          <ul className="flex items-center gap-3 sm:gap-6">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {item.label}
                 </Link>
