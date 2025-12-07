@@ -169,8 +169,8 @@ export const useThemeToggle = ({
 export const ThemeToggleButton = ({
   className = '',
   variant = 'circle',
-  start = 'center',
-  blur = false,
+  start = 'top-right',
+  blur = true,
   gifUrl = '',
 }: {
   className?: string;
@@ -678,12 +678,17 @@ export const createAnimation = (
       css: `
        ::view-transition-group(root) {
         animation-duration: 1s;
-        animation-timing-function: var(--expo-out);
+        animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      
+      @media (min-width: 768px) {
+        ::view-transition-group(root) {
+          animation-duration: 1.6s;
+        }
       }
             
       ::view-transition-new(root) {
         animation-name: reveal-light-${start}${blur ? '-blur' : ''};
-        ${blur ? 'filter: blur(2px);' : ''}
       }
 
       ::view-transition-old(root),
@@ -693,15 +698,15 @@ export const createAnimation = (
       }
       .dark::view-transition-new(root) {
         animation-name: reveal-dark-${start}${blur ? '-blur' : ''};
-        ${blur ? 'filter: blur(2px);' : ''}
       }
 
       @keyframes reveal-dark-${start}${blur ? '-blur' : ''} {
         from {
           clip-path: circle(0% at ${clipPosition});
-          ${blur ? 'filter: blur(8px);' : ''}
+          ${blur ? 'filter: blur(10px);' : ''}
         }
-        ${blur ? '50% { filter: blur(4px); }' : ''}
+        ${blur ? '40% { filter: blur(5px); }' : ''}
+        ${blur ? '70% { filter: blur(2px); }' : ''}
         to {
           clip-path: circle(150.0% at ${clipPosition});
           ${blur ? 'filter: blur(0px);' : ''}
@@ -711,9 +716,10 @@ export const createAnimation = (
       @keyframes reveal-light-${start}${blur ? '-blur' : ''} {
         from {
            clip-path: circle(0% at ${clipPosition});
-           ${blur ? 'filter: blur(8px);' : ''}
+           ${blur ? 'filter: blur(10px);' : ''}
         }
-        ${blur ? '50% { filter: blur(4px); }' : ''}
+        ${blur ? '40% { filter: blur(5px); }' : ''}
+        ${blur ? '70% { filter: blur(2px); }' : ''}
         to {
           clip-path: circle(150.0% at ${clipPosition});
           ${blur ? 'filter: blur(0px);' : ''}
