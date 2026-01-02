@@ -3,10 +3,11 @@
 import { ThemeToggleButton } from "@/components/theme/ThemeSwitch";
 import { DATA } from "@/data/resume";
 import Link from "next/link";
+import { CommandMenu } from "@/components/command-menu";
 
 export default function Navbar() {
   const navItems = [
-    { href: "/", label: "Home" },
+    // { href: "/", label: "Home" },
     { href: "/projects", label: "Projects" },
     ];
 
@@ -34,6 +35,9 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
+
+          {/* Command Menu */}
+          <CommandMenu />
 
           {/* Theme Toggle */}
           <ThemeToggleButton />
