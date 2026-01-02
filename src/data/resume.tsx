@@ -62,8 +62,9 @@ export const DATA = {
   education: [],
   projects: [
     {
+      slug: "audora",
       title: "Audora",
-      dates: "August 2025 - Present",
+      dates: "August 2025 - November 2025",
       active: true,
       description:
       "Real-time music streaming platform with synchronized playback and live jam sessions.",
@@ -94,6 +95,7 @@ export const DATA = {
     },
 
     {
+      slug: "vibechat",
       title: "VibeChat",
       dates: "July 2025 - September 2025",
       active: true,
@@ -125,9 +127,11 @@ export const DATA = {
       video: "",
     },
     {
+      slug: "porsche-911",
       title: "Porsche-911",
       dates: "",
       active: false,
+      status: "Building",
       description:
       "A website that showcase the porsche 911 car model with stunning visuals and interactive features.",
       technologies: [
@@ -142,6 +146,7 @@ export const DATA = {
       video: "/Porsche911.mp4",
     },
     {
+      slug: "authentiscan",
       title: "Authentiscan",
       dates: "July 2025 - September 2025",
       active: true,
