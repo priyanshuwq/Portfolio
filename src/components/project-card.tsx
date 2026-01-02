@@ -34,6 +34,7 @@ interface Props {
   }[];
   className?: string;
   active?: boolean;
+  slug?: string;
 }
 
 // Tech icon mapper
@@ -124,6 +125,7 @@ export function ProjectCard({
   links,
   className,
   active = true,
+  slug,
 }: Props) {
   return (
     <Card
@@ -229,21 +231,30 @@ export function ProjectCard({
             )}
           </div>
           
-          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 group/btn">
-            <span className="font-medium">View Details</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="size-4 transition-transform duration-200 group-hover/btn:translate-x-0.5"
+          {slug ? (
+            <Link 
+              href={`/projects/${slug}`}
+              className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
             >
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </button>
+              <span className="font-medium">View Details</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </Link>
+          ) : (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <span className="font-medium">In Progress</span>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
