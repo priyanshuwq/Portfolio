@@ -44,7 +44,7 @@ export default function Page() {
         <div className="mx-auto w-full max-w-2xl">
           {/* Banner Image with Overlay Text - Hidden on mobile */}
           <BlurFade delay={BLUR_FADE_DELAY}>
-            <div className="relative w-full h-40 sm:h-60 md:h-70 overflow-hidden bg-muted">
+            <div className="relative w-full h-40 sm:h-60 md:h-70 overflow-hidden bg-muted rounded-2xl">
               <Image
                 src="/Banner.jpeg"
                 alt="Profile Banner"
@@ -70,8 +70,8 @@ export default function Page() {
             {/* Avatar */}
             <BlurFade delay={BLUR_FADE_DELAY * 1.5}>
               <div className="-mt-8 sm:-mt-16 mb-4">
-                <Avatar className="w-20 h-20 sm:w-32 sm:h-32 border-4 border-background shadow-xl">
-                  <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
+                <Avatar className="w-20 h-20 sm:w-32 sm:h-32 rounded-none drop-shadow-xl">
+                  <AvatarImage alt={DATA.name} src={DATA.avatarUrl} className="object-contain" />
                   <AvatarFallback>
                     {DATA.name
                       .split(" ")
