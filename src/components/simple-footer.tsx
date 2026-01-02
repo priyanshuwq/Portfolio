@@ -3,20 +3,22 @@
 import { DATA } from "@/data/resume";
 import Image from "next/image";
 
-export function SimpleFooter() {
+export function SimpleFooter({ showGif = false }: { showGif?: boolean }) {
   return (
     <footer className="border-t">
       <div className="mx-auto w-full max-w-2xl px-4 sm:px-6 py-8">
-        {/* Porsche GIF */}
-        <div className="mb-6 relative w-full h-[200px] sm:h-[250px] rounded-lg overflow-hidden bg-gradient-to-b from-background/50 to-muted/30">
-          <Image
-            src="/porsche_911_gt3.gif"
-            alt="Porsche 911 GT3"
-            fill
-            className="object-cover"
-            unoptimized
-          />
-        </div>
+        {/* Porsche GIF - Only on homepage */}
+        {showGif && (
+          <div className="mb-6 relative w-full h-[200px] sm:h-[250px] rounded-lg overflow-hidden bg-gradient-to-b from-background/50 to-muted/30">
+            <Image
+              src="/porsche_911_gt3.gif"
+              alt="Porsche 911 GT3"
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          </div>
+        )}
 
         <div className="flex flex-col items-center gap-4">
           {/* Social Links */}
