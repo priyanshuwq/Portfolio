@@ -1,26 +1,13 @@
 "use client";
 
 import { DATA } from "@/data/resume";
-import Image from "next/image";
 
-export function SimpleFooter({ showGif = false }: { showGif?: boolean }) {
+export function SimpleFooter() {
   return (
-    <footer className="border-t">
-      <div className="mx-auto w-full max-w-2xl px-4 sm:px-6 py-8">
-        {/* Porsche GIF - Only on homepage */}
-        {showGif && (
-          <div className="mb-6 relative w-full h-[200px] sm:h-[250px] rounded-lg overflow-hidden bg-gradient-to-b from-background/50 to-muted/30">
-            <Image
-              src="/porsche_911_gt3.gif"
-              alt="Porsche 911 GT3"
-              fill
-              className="object-cover"
-              unoptimized
-            />
-          </div>
-        )}
-
-        <div className="flex flex-col items-center gap-4">
+    <footer className="mt-auto">
+      <div className="mx-auto w-full max-w-2xl px-6">
+        <div className="border-t pt-6 pb-6">
+          <div className="flex flex-col items-center gap-3">
           {/* Social Links */}
           <div className="flex items-center gap-4 text-sm">
             {Object.entries(DATA.contact.social)
@@ -48,6 +35,7 @@ export function SimpleFooter({ showGif = false }: { showGif?: boolean }) {
             </p>
           </div>
         </div>
+      </div>
       </div>
     </footer>
   );
