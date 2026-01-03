@@ -20,8 +20,6 @@ import React, { Suspense, lazy } from "react";
 import { Card } from "@/components/ui/card";
 import { SkillIcon } from "@/components/skill-icons";
 import { SpotifyNowPlaying } from "@/components/spotify-now-playing";
-import { SimpleFooter } from "@/components/simple-footer";
-import { useKeyboardShortcuts } from "@/components/command-menu";
 
 const GitHubContributions = lazy(() => 
   import("@/components/github-contributions").then(mod => ({ default: mod.GitHubContributions }))
@@ -34,9 +32,6 @@ export default function Page() {
     "priyanshuwq";
 
   const [githubTotal, setGithubTotal] = React.useState<number | null>(null);
-
-  // Enable keyboard shortcuts
-  useKeyboardShortcuts();
 
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-16 pt-8 sm:pt-0">
@@ -402,8 +397,6 @@ export default function Page() {
         </div>
       </section> */}
 
-      {/* Simple Footer */}
-      <SimpleFooter showGif={true} />
     </main>
   );
 }

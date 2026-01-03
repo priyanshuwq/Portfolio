@@ -1,5 +1,9 @@
+/* stylelint-disable at-rule-no-unknown */
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind base;
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind components;
+/* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind utilities;
 
 @layer base {
@@ -71,26 +75,32 @@
 
   @layer base {
     * {
+      /* stylelint-disable-next-line at-rule-no-unknown */
       @apply border-border;
     }
     body {
+      /* stylelint-disable-next-line at-rule-no-unknown */
       @apply bg-background text-foreground;
     }
   }
 
   h3 code {
+    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply !text-lg md:!text-xl;
   }
   
   pre {
+    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply !px-0 rounded-lg overflow-x-auto py-4
   }
    
   pre [data-line] {
+    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply px-4
   }
 
   code {
+    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply text-sm md:text-base !leading-loose;
   }
   
@@ -119,6 +129,7 @@
   code[data-line-numbers] > [data-line]::before {
     counter-increment: line;
     content: counter(line);
+    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply inline-block w-4 mr-4 text-right text-gray-500;
   }
  

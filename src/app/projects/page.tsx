@@ -4,7 +4,6 @@ import { ProjectCard } from "@/components/project-card";
 import BlurFade from "@/components/magicui/blur-fade";
 import { DATA } from "@/data/resume";
 import { useState } from "react";
-import { SimpleFooter } from "@/components/simple-footer";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -24,8 +23,8 @@ export default function ProjectsPage() {
   const buildingCount = DATA.projects.filter((p) => !p.active).length;
 
   return (
-    <main className="flex min-h-screen flex-col items-center px-6 py-20 sm:py-24">
-      <div className="w-full max-w-6xl space-y-6">
+    <main className="flex min-h-screen flex-col items-center">
+      <div className="w-full space-y-6">
         {/* Header */}
         <BlurFade delay={BLUR_FADE_DELAY}>
           <div className="flex flex-col items-center text-center space-y-3 border-b border-border pb-6">
@@ -126,7 +125,6 @@ export default function ProjectsPage() {
           </div>
         </BlurFade>
       </div>
-      <SimpleFooter />
     </main>
   );
 }

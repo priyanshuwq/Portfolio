@@ -31,6 +31,9 @@ export function CommandMenu() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
+  // Enable global keyboard shortcuts
+  useKeyboardShortcuts();
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -120,6 +123,9 @@ export function CommandMenu() {
                 const spotifySection = document.querySelector('#spotify');
                 if (spotifySection) {
                   spotifySection.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  // Navigate to home if spotify section doesn't exist
+                  router.push('/#spotify');
                 }
               })}
             >
@@ -238,6 +244,9 @@ export function useKeyboardShortcuts() {
             const spotifySection = document.querySelector('#spotify');
             if (spotifySection) {
               spotifySection.scrollIntoView({ behavior: 'smooth' });
+            } else if (window.location.pathname !== '/') {
+              // Navigate to home first if spotify section doesn't exist
+              router.push('/#spotify');
             }
           }
           break;

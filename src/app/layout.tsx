@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import { SimpleFooter } from "@/components/simple-footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
@@ -32,16 +33,19 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          "min-h-screen bg-background antialiased"
+          "min-h-screen bg-background antialiased flex flex-col"
         )}
         style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider delayDuration={0}>
             <Navbar />
-            <div className="max-w-2xl mx-auto py-12 sm:py-24 px-6">
-              {children}
-            </div>
+            <main className="flex-1">
+              <div className="max-w-2xl mx-auto py-12 sm:py-24 px-6">
+                {children}
+              </div>
+            </main>
+            <SimpleFooter />
           </TooltipProvider>
         </ThemeProvider>
       </body>

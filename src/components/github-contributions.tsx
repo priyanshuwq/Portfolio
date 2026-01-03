@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Activity } from "react-activity-calendar";
 
 const ActivityCalendar = dynamic(
@@ -73,10 +73,6 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
   const [total, setTotal] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const calendarRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -87,8 +83,7 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
           throw new Error("Failed to load contributions");
         }
         const data = await res.json();
-        const filteredValues = filterCommittedMonths(data.values ?? []);
-        setDays(filteredValues);
+        setDays(data.values ?? []);
         const totalCount = data.total ?? 0;
         setTotal(totalCount);
         if (onTotalLoad) {
@@ -105,44 +100,14 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
     fetchData();
   }, [username, onTotalLoad]);
 
-  const updateScale = () => {
-    if (!containerRef.current || !calendarRef.current) return;
-    const containerWidth = containerRef.current.offsetWidth;
-    const actualWidth = calendarRef.current.scrollWidth;
-
-    if (actualWidth > containerWidth) {
-      const newScale = containerWidth / actualWidth;
-      setScale(Math.max(newScale, 0.6));
-    } else {
-      setScale(1);
-    }
-  };
-
-  useEffect(() => {
-    const handleResize = () => updateScale();
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (!calendarRef.current) return;
-    const observer = new ResizeObserver(updateScale);
-    observer.observe(calendarRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   const calendarData = useMemo(() => mapToCalendarData(days), [days]);
-  const shouldShowCalendar = !isLoading && !error && calendarData.length >0;
+  const shouldShowCalendar = !isLoading && !error && calendarData.length > 0;
 
   return (
     <section className={className}>
       <div className="space-y-4">
 
-        <div
-          ref={containerRef}
-          className="relative w-full overflow-hidden rounded-lg border bg-card p-4"
-        >
+        <div className="relative w-full rounded-lg border bg-card">
           <style>{`
             .react-activity-calendar__scroll-container {
               overflow: visible !important;
@@ -150,7 +115,37 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
             .react-activity-calendar__count {
               display: none !important;
             }
-            @media (max-width: 640px) {
+            
+            /* Make calendar responsive to fit in container */
+            .react-activity-calendar {
+              max-width: 100%;
+            }
+            
+            /* Mobile: enable horizontal scroll, hide scrollbar */
+            @media (max-width: 768px) {
+              .github-calendar-mobile {
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE and Edge */
+              }
+              .github-calendar-mobile::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, Opera */
+              }
+              .react-activity-calendar text {
+                font-size: 10px !important;
+              }
+              .react-activity-calendar {
+                font-size: 12px !important;
+              }
+            }
+            
+            /* Desktop: no scroll, fit content */
+            @media (min-width: 769px) {
+              .react-activity-calendar__scroll-container {
+                overflow: visible !important;
+              }
               .react-activity-calendar text {
                 font-size: 9px !important;
               }
@@ -161,36 +156,29 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
           `}</style>
 
           {isLoading && (
-            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
+            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground p-4">
               Loading contribution data…
             </div>
           )}
 
           {error && (
-            <div className="flex h-48 items-center justify-center text-sm text-destructive">
+            <div className="flex h-48 items-center justify-center text-sm text-destructive p-4">
               {error}
             </div>
           )}
 
           {shouldShowCalendar && (
             <motion.div
-              className="w-full overflow-hidden"
+              className="w-full p-4 overflow-hidden"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35 }}
             >
-              <div
-                ref={calendarRef}
-                style={{
-                  transform: `scale(${scale})`,
-                  transformOrigin: "top left",
-                  width: scale < 1 ? `${100 / scale}%` : "100%",
-                }}
-              >
+              <div className="github-calendar-mobile">
                 <ActivityCalendar
                   data={calendarData}
-                  blockSize={12}
-                  blockMargin={4}
+                  blockSize={9}
+                  blockMargin={2}
                   colorScheme={resolvedTheme === "dark" ? "dark" : "light"}
                   theme={{
                     light: githubTheme.light,
@@ -208,7 +196,7 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
             </motion.div>
           )}
           {!isLoading && !error && calendarData.length === 0 && (
-            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
+            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground p-4">
               No commits recorded recently.
             </div>
           )}

@@ -5,14 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DATA } from "@/data/resume";
 import { Send } from "lucide-react";
-import { SimpleFooter } from "@/components/simple-footer";
 
 const BLUR_FADE_DELAY = 0.04;
 
 export default function ContactPage() {
   return (
     <main className="flex flex-col min-h-[100dvh] pt-14 sm:pt-16">
-      <div className="mx-auto w-full max-w-2xl px-6 py-12">
         <section id="contact">
           <div className="flex flex-col gap-4 w-full">
             <BlurFade delay={BLUR_FADE_DELAY}>
@@ -106,8 +104,6 @@ export default function ContactPage() {
             </BlurFade>
           </div>
         </section>
-      </div>
-      <SimpleFooter />
     </main>
   );
 }

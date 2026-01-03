@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, ExternalLink, Github, Check } from "lucide-react";
-import { SimpleFooter } from "@/components/simple-footer";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -65,8 +64,8 @@ export default async function ProjectPage({
     .slice(0, 2);
 
   return (
-    <main className="flex flex-col min-h-screen py-12 sm:py-24 px-6">
-      <div className="max-w-4xl mx-auto w-full space-y-8">
+    <main className="flex flex-col min-h-screen">
+      <div className="w-full space-y-8">
         {/* Back Button */}
         <BlurFade delay={BLUR_FADE_DELAY}>
           <Link href="/projects" className="inline-flex items-center text-sm hover:underline">
@@ -280,7 +279,6 @@ export default async function ProjectPage({
           </div>
         </BlurFade>
       </div>
-      <SimpleFooter />
     </main>
   );
 }
