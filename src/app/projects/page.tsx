@@ -46,14 +46,14 @@ export default function ProjectsPage() {
             </h2>
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setFilter("all")}
+                onClick={() => setFilter("active")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  filter === "all"
+                  filter === "active"
                     ? "bg-foreground text-background shadow-md"
                     : "bg-muted/50 text-muted-foreground hover:bg-muted"
                 }`}
               >
-                Working ({activeCount + buildingCount})
+                Working ({activeCount})
               </button>
               <button
                 onClick={() => setFilter("building")}
