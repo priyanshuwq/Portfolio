@@ -3,6 +3,7 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { ProjectCard } from "@/components/project-card";
+import { BlogCard } from "@/components/blog-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
@@ -371,6 +372,38 @@ export default function Page() {
             <GitHubContributions username={githubUsername} onTotalLoad={setGithubTotal} />
           </Suspense>
         </BlurFade>
+        </div>
+      </section>
+      
+      {/* Blog Section */}
+      <section id="blogs">
+        <div className="space-y-6 w-full">
+          <BlurFade delay={BLUR_FADE_DELAY * 17}>
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <h3 className="text-sm font-medium text-muted-foreground">Featured</h3>
+                <h2 className="text-xl font-bold">Blogs</h2>
+              </div>
+              <Button variant="outline" asChild size="sm">
+                <Link href="/blogs">
+                  View All
+                </Link>
+              </Button>
+            </div>
+          </BlurFade>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <BlurFade delay={BLUR_FADE_DELAY * 18}>
+              <BlogCard
+                title="WebRTC"
+                description="Understanding WebRTC fundamentals, peer-to-peer communication, and building real-time applications."
+                date="Coming Soon"
+                tags={["WebRTC", "JavaScript", "Real-time"]}
+                image="/blog/webrtc.png"
+                status="upcoming"
+              />
+            </BlurFade>
+          </div>
         </div>
       </section>
       

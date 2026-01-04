@@ -23,7 +23,7 @@ export default function ProjectsPage() {
   const buildingCount = DATA.projects.filter((p) => !p.active).length;
 
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <main className="flex min-h-screen flex-col items-center pt-8 sm:pt-12">
       <div className="w-full space-y-6">
         {/* Header */}
         <BlurFade delay={BLUR_FADE_DELAY}>

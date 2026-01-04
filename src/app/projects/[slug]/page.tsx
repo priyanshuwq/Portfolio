@@ -64,7 +64,7 @@ export default async function ProjectPage({
     .slice(0, 2);
 
   return (
-    <main className="flex flex-col min-h-screen">
+    <main className="flex flex-col min-h-screen pt-8 sm:pt-12">
       <div className="w-full space-y-8">
         {/* Back Button */}
         <BlurFade delay={BLUR_FADE_DELAY}>
@@ -230,7 +230,7 @@ export default async function ProjectPage({
                     href={`/projects/${relatedProject.slug}`}
                     className="block group"
                   >
-                    <Card className="h-full hover:border-primary transition-colors">
+                    <Card className="h-full rounded-xl border-2 hover:border-primary transition-colors">
                       <CardContent className="p-6">
                         <div className="space-y-2">
                           <div className="flex items-start justify-between">

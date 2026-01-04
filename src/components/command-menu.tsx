@@ -23,7 +23,8 @@ import {
   Linkedin,
   Twitter,
   MessageCircle,
-  Moon
+  Moon,
+  BookOpen
 } from "lucide-react";
 import { DATA } from "@/data/resume";
 
@@ -90,6 +91,15 @@ export function CommandMenu() {
               <span>Go to Projects</span>
               <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
                 P
+              </kbd>
+            </CommandItem>
+            <CommandItem
+              onSelect={() => runCommand(() => router.push("/blogs"))}
+            >
+              <BookOpen className="mr-2 h-4 w-4" />
+              <span>Go to Blogs</span>
+              <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                B
               </kbd>
             </CommandItem>
             <CommandItem
@@ -223,6 +233,12 @@ export function useKeyboardShortcuts() {
           if (!isTyping()) {
             e.preventDefault();
             router.push("/projects");
+          }
+          break;
+        case "b":
+          if (!isTyping()) {
+            e.preventDefault();
+            router.push("/blogs");
           }
           break;
         case "c":
