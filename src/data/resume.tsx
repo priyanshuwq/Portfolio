@@ -187,4 +187,15 @@ export const DATA = {
     },
   ],
   hackathons: [],
+  blogs: [
+    {
+      title: "WebRTC",
+      description: "Understanding WebRTC fundamentals, peer-to-peer communication, and building real-time applications.",
+      date: "Coming Soon",
+      tags: ["WebRTC", "JavaScript", "Real-time"],
+      image: "/blog/WebRTC.png",
+      status: "upcoming" as const,
+      href: undefined,
+    },
+  ],
 } as const;

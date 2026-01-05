@@ -393,16 +393,19 @@ export default function Page() {
           </BlurFade>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <BlurFade delay={BLUR_FADE_DELAY * 18}>
-              <BlogCard
-                title="WebRTC"
-                description="Understanding WebRTC fundamentals, peer-to-peer communication, and building real-time applications."
-                date="Coming Soon"
-                tags={["WebRTC", "JavaScript", "Real-time"]}
-                image="/blog/webrtc.png"
-                status="upcoming"
-              />
-            </BlurFade>
+            {DATA.blogs.slice(0, 2).map((blog, id) => (
+              <BlurFade key={blog.title} delay={BLUR_FADE_DELAY * 18 + id * 0.05}>
+                <BlogCard
+                  title={blog.title}
+                  description={blog.description}
+                  date={blog.date}
+                  tags={blog.tags}
+                  image={blog.image}
+                  status={blog.status}
+                  href={blog.href}
+                />
+              </BlurFade>
+            ))}
           </div>
         </div>
       </section>

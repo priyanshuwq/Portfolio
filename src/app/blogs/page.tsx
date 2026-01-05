@@ -1,20 +1,12 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { BlogCard } from "@/components/blog-card";
+import { DATA } from "@/data/resume";
 
 const BLUR_FADE_DELAY = 0.04;
 
-const blogPosts = [
-  {
-    title: "WebRTC",
-    description: "Understanding WebRTC fundamentals, peer-to-peer communication, and building real-time applications.",
-    date: "Coming Soon",
-    tags: ["WebRTC", "JavaScript", "Real-time"],
-    image: "/blog/webrtc.png",
-    status: "upcoming" as const,
-  },
-];
-
 export default function BlogPage() {
+  const blogPosts = DATA.blogs;
+  
   return (
     <main className="flex min-h-screen flex-col items-center pt-8 sm:pt-12">
       <div className="w-full space-y-8">
@@ -52,6 +44,7 @@ export default function BlogPage() {
                     tags={post.tags}
                     image={post.image}
                     status={post.status}
+                    href={post.href}
                   />
                 </BlurFade>
               ))}

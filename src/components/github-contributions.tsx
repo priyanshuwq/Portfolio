@@ -42,12 +42,14 @@ const extractActiveMonths = (days: ContributionDay[]) => {
 };
 
 const filterCommittedMonths = (days: ContributionDay[]) => {
-  const activeMonths = extractActiveMonths(days);
-  if (activeMonths.size === 0) {
-    return [];
-  }
+  if (days.length === 0) return [];
 
-  return days.filter((day) => activeMonths.has(day.date.slice(0, 7)));
+  // Find the first month with contributions (e.g., August)
+  const firstContributionDate = days.find((day) => day.count > 0)?.date;
+  if (!firstContributionDate) return [];
+
+  // Filter to show from first contribution month onwards
+  return days.filter((day) => day.date >= firstContributionDate);
 };
 
 const mapToCalendarData = (days: ContributionDay[]): Activity[] => {
@@ -100,7 +102,10 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
     fetchData();
   }, [username, onTotalLoad]);
 
-  const calendarData = useMemo(() => mapToCalendarData(days), [days]);
+  const calendarData = useMemo(() => {
+    const filteredDays = filterCommittedMonths(days);
+    return mapToCalendarData(filteredDays);
+  }, [days]);
   const shouldShowCalendar = !isLoading && !error && calendarData.length > 0;
 
   return (
@@ -121,8 +126,8 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
               max-width: 100%;
             }
             
-            /* Mobile: enable horizontal scroll, hide scrollbar */
-            @media (max-width: 768px) {
+            /* Mobile & Tablet: enable horizontal scroll, hide scrollbar */
+            @media (max-width: 1024px) {
               .github-calendar-mobile {
                 overflow-x: auto;
                 overflow-y: hidden;
@@ -134,23 +139,26 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
                 display: none; /* Chrome, Safari, Opera */
               }
               .react-activity-calendar text {
-                font-size: 10px !important;
+                font-size: 11px !important;
               }
               .react-activity-calendar {
-                font-size: 12px !important;
+                font-size: 13px !important;
               }
             }
             
-            /* Desktop: no scroll, fit content */
-            @media (min-width: 769px) {
+            /* Desktop: no scroll, fit all months in view */
+            @media (min-width: 1025px) {
               .react-activity-calendar__scroll-container {
                 overflow: visible !important;
               }
+              .github-calendar-mobile {
+                overflow: visible !important;
+              }
               .react-activity-calendar text {
-                font-size: 9px !important;
+                font-size: 11px !important;
               }
               .react-activity-calendar {
-                font-size: 11px !important;
+                font-size: 13px !important;
               }
             }
           `}</style>
@@ -177,8 +185,8 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
               <div className="github-calendar-mobile">
                 <ActivityCalendar
                   data={calendarData}
-                  blockSize={9}
-                  blockMargin={2}
+                  blockSize={12}
+                  blockMargin={4}
                   colorScheme={resolvedTheme === "dark" ? "dark" : "light"}
                   theme={{
                     light: githubTheme.light,
