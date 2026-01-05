@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaSpotify } from "react-icons/fa";
+import { Play, Pause } from "lucide-react";
 
 interface SpotifyData {
   isPlaying: boolean;
@@ -42,7 +43,7 @@ export function SpotifyNowPlaying() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000); // Poll every 5 seconds
+    const interval = setInterval(fetchData, 2000); // Poll every 2 seconds for faster updates
 
     return () => clearInterval(interval);
   }, []);
@@ -80,19 +81,14 @@ export function SpotifyNowPlaying() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col gap-2 mt-4 w-full"
+        className="w-full"
       >
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <FaSpotify className="size-3 text-[#1DB954]" />
-          <span className="font-medium">Loading...</span>
-        </div>
-        <div className="p-4 rounded-xl bg-gradient-to-br from-black/5 via-black/5 to-black/10 dark:from-white/5 dark:via-white/5 dark:to-white/10 border border-black/10 dark:border-white/10 backdrop-blur-md shadow-lg">
-          <div className="flex items-center gap-4">
-            <div className="relative size-16 rounded-lg overflow-hidden shrink-0 bg-muted animate-pulse" />
-            <div className="flex flex-col gap-2 flex-1">
-              <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
-              <div className="h-3 bg-muted rounded animate-pulse w-1/2" />
-            </div>
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border shadow-sm">
+          <div className="relative size-14 rounded-md overflow-hidden shrink-0 bg-muted animate-pulse" />
+          <div className="flex flex-col gap-2 flex-1">
+            <div className="h-3 bg-muted rounded animate-pulse w-16" />
+            <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
+            <div className="h-3 bg-muted rounded animate-pulse w-1/2" />
           </div>
         </div>
       </motion.div>
@@ -106,22 +102,16 @@ export function SpotifyNowPlaying() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col gap-2 mt-4 w-full"
+        className="w-full"
       >
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <FaSpotify className="size-3 text-[#1DB954]" />
-          <span className="font-medium">Not Playing</span>
-        </div>
-        <div className="p-4 rounded-xl bg-gradient-to-br from-black/5 via-black/5 to-black/10 dark:from-white/5 dark:via-white/5 dark:to-white/10 border border-black/10 dark:border-white/10 backdrop-blur-md shadow-lg">
-          <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
-            No recent activity
-          </div>
+        <div className="flex items-center justify-center p-4 rounded-xl bg-card border border-border shadow-sm text-sm text-muted-foreground">
+          No recent activity
         </div>
       </motion.div>
     );
   }
 
-  const statusText = data.isPlaying ? "Now Playing" : "Last Played";
+  const statusText = data.isPlaying ? "Now Playing" : "Last played";
   const progressPercent = data.duration ? (currentProgress / data.duration) * 100 : 0;
 
   return (
@@ -129,66 +119,64 @@ export function SpotifyNowPlaying() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col gap-2 mt-4 w-full"
+      className="w-full"
     >
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <FaSpotify className="size-3 text-[#1DB954]" />
-        <span className="font-medium">{statusText}</span>
-      </div>
-      
-      <a
-        href={data.songUrl || '#'}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group relative flex flex-col gap-3 p-4 rounded-xl bg-gradient-to-br from-black/5 via-black/5 to-black/10 dark:from-white/5 dark:via-white/5 dark:to-white/10 hover:from-black/10 hover:via-black/10 hover:to-black/15 dark:hover:from-white/10 dark:hover:via-white/10 dark:hover:to-white/15 transition-all duration-300 border border-black/10 dark:border-white/10 backdrop-blur-md shadow-lg hover:shadow-xl"
-      >
-        <div className="flex items-center gap-4">
+      <div className="relative rounded-xl bg-card border border-border shadow-sm overflow-hidden">
+        <a
+          href={data.songUrl || '#'}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative flex items-center gap-3 p-3 hover:bg-accent/30 transition-all duration-300"
+        >
           {/* Album Art */}
-          <div className="relative size-16 rounded-lg overflow-hidden shrink-0 shadow-md">
+          <div className="relative size-12 rounded-md overflow-hidden shrink-0">
             <Image
               src={data.albumImageUrl!}
               alt={data.album!}
               fill
-              sizes="64px"
+              sizes="48px"
               loading="eager"
               className="object-cover"
             />
+            {/* Spotify Icon Overlay */}
+            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <FaSpotify className="size-5 text-[#1DB954]" />
+            </div>
           </div>
           
           {/* Song Info */}
-          <div className="flex flex-col justify-center flex-1 min-w-0 gap-1">
-            <span className="text-sm font-bold truncate text-foreground group-hover:text-[#1DB954] transition-colors leading-tight">
+          <div className="flex flex-col justify-center flex-1 min-w-0 gap-0.5">
+            <span className="text-[9px] text-muted-foreground font-medium uppercase tracking-wider">
+              {statusText}
+            </span>
+            <span className="text-sm font-semibold truncate text-foreground leading-tight">
               {data.title}
             </span>
             <span className="text-xs text-muted-foreground truncate leading-tight">
-              {data.artist}
+              by {data.artist}
             </span>
           </div>
-        </div>
-        
-        {/* Progress Bar - Only visible when playing */}
-        {data.isPlaying && (
-          <div className="flex flex-col gap-1">
-            <div className="relative w-full h-1 bg-black/10 dark:bg-white/10 rounded-full overflow-visible group/progress">
-              <div 
-                className="h-full bg-black dark:bg-white rounded-full transition-all duration-300 relative"
-                style={{ width: `${Math.min(progressPercent, 100)}%` }}
-              >
-                {/* Progress Dot - Always visible, not just on hover */}
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 size-3 bg-black dark:bg-white rounded-full shadow-md" />
-              </div>
+
+          {/* Play/Pause Button */}
+          <div className="shrink-0 mr-1">
+            <div className="size-8 rounded-full bg-foreground/10 hover:bg-foreground/20 flex items-center justify-center transition-colors">
+              {data.isPlaying ? (
+                <Pause className="size-3.5 text-foreground fill-foreground" />
+              ) : (
+                <Play className="size-3.5 text-foreground fill-foreground ml-0.5" />
+              )}
             </div>
-            
-            {/* Time display */}
-            {data.duration && (
-              <div className="flex items-center justify-between text-[10px] text-muted-foreground/70">
-                <span>{formatTime(currentProgress)}</span>
-                <span>{formatTime(data.duration)}</span>
-              </div>
-            )}
           </div>
-        )}
-      </a>
+        </a>
+
+        {/* Progress Bar - Always visible but only active when playing */}
+        <div className="relative w-full h-1 bg-muted/50">
+          <div 
+            className="h-full bg-foreground transition-all duration-300"
+            style={{ width: data.isPlaying ? `${Math.min(progressPercent, 100)}%` : '0%' }}
+          />
+        </div>
+      </div>
     </motion.div>
   );
 }
