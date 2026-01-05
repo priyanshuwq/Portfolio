@@ -226,7 +226,9 @@ export default function Page() {
 
         {/* Spotify Now Playing - Full Width */}
           <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
-            <SpotifyNowPlaying />
+            <div className="mt-6">
+              <SpotifyNowPlaying />
+            </div>
           </BlurFade>
         </div>
       </section>
