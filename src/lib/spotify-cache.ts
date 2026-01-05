@@ -22,8 +22,8 @@ export function readCache(): CachedTrack | null {
       const data = fs.readFileSync(CACHE_FILE, 'utf-8');
       return JSON.parse(data);
     }
-  } catch (error) {
-    console.error('Error reading cache:', error);
+  } catch {
+    // Silent fail
   }
   return null;
 }
@@ -31,8 +31,7 @@ export function readCache(): CachedTrack | null {
 export function writeCache(track: CachedTrack): void {
   try {
     fs.writeFileSync(CACHE_FILE, JSON.stringify(track, null, 2));
-    console.log('✅ Cache updated:', track.title);
-  } catch (error) {
-    console.error('Error writing cache:', error);
+  } catch {
+    // Silent fail
   }
 }
