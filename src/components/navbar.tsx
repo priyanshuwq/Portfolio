@@ -18,8 +18,8 @@ export default function Navbar() {
         className="w-full max-w-2xl h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between pointer-events-auto bg-background/70 backdrop-blur-sm border-b border-border/40"
       >
         {/* Logo/Name - Responsive text size */}
-        <Link href="/" className="font-bold text-base sm:text-lg tracking-tight hover:text-foreground/80 transition-colors">
-          {DATA.name}
+        <Link href="/" className="font-bold text-sm sm:text-base tracking-tight hover:text-foreground/80 transition-colors" style={{ fontFamily: 'Secretoria, sans-serif' }}>
+          Shkhr
         </Link>
 
         {/* Nav Links */}
