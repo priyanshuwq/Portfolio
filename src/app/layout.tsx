@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     default: DATA.name,
     template: `%s | ${DATA.name}`,
   },
-  description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise..",
+  description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
   keywords: ["Priyanshu", "FullStack Developer", "Web Developer", "React", "Next.js", "TypeScript", "Portfolio"],
   authors: [{ name: DATA.name }],
   creator: DATA.name,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://shekhr.dev",
     title: DATA.name,
-    description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise..",
+    description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
     siteName: DATA.name,
     images: [
       {
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: DATA.name,
-    description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise..",
+    description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
     creator: "@priyanshuwq",
     images: ["/preview.png"],
   },
