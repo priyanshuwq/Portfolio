@@ -7,7 +7,7 @@ export const DATA = {
   url: "https://shekhr.dev",
   location: "India",
   locationLink: "https://www.google.com/maps/place/india",
-  description: "",
+  description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
   summary: "I turn ideas into interactive web experiences using React, Next.js, and TypeScript. I love playing with animations using GSAP and Three.js. Always curious, always building.",
   avatarUrl: "./profile.png",
   skills: [
