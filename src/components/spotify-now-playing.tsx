@@ -22,6 +22,7 @@ export function SpotifyNowPlaying() {
   const [data, setData] = useState<SpotifyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentProgress, setCurrentProgress] = useState(0);
+  const [lastSyncTime, setLastSyncTime] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,11 +30,22 @@ export function SpotifyNowPlaying() {
         const res = await fetch("/api/spotify");
         const json = await res.json();
         
-        // Always set the data from server (includes cached data)
+        // Check if song changed or playback state changed
+        const songChanged = data?.title !== json.title;
+        const playbackChanged = data?.isPlaying !== json.isPlaying;
+        
         setData(json);
         
-        if (json.progress !== undefined) {
+        // Reset progress when song stops or changes
+        if (!json.isPlaying) {
+          setCurrentProgress(0);
+        } else if (songChanged && json.progress !== undefined) {
           setCurrentProgress(json.progress);
+          setLastSyncTime(Date.now());
+        } else if (playbackChanged && json.isPlaying && json.progress !== undefined) {
+          // Song resumed - sync progress
+          setCurrentProgress(json.progress);
+          setLastSyncTime(Date.now());
         }
       } catch (error) {
         console.error("Error fetching Spotify data", error);
@@ -43,16 +55,20 @@ export function SpotifyNowPlaying() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 2000); // Poll every 2 seconds for faster updates
+    const interval = setInterval(fetchData, 2000); // Poll every 2 seconds for quick response
 
     return () => clearInterval(interval);
-  }, []);
+  }, [data?.title, data?.isPlaying]);
 
-  // Update progress in real-time when playing
+  // Update progress in real-time when playing (independent of data fetches)
   useEffect(() => {
-    if (!data?.isPlaying || !data.progress || !data.duration) return;
+    if (!data?.isPlaying || !data.duration) return;
 
-    setCurrentProgress(data.progress);
+    // Initialize progress if not set
+    if (currentProgress === 0 && data.progress) {
+      setCurrentProgress(data.progress);
+      setLastSyncTime(Date.now());
+    }
     
     const progressInterval = setInterval(() => {
       setCurrentProgress((prev) => {
@@ -65,7 +81,7 @@ export function SpotifyNowPlaying() {
     }, 1000);
 
     return () => clearInterval(progressInterval);
-  }, [data?.isPlaying, data?.progress, data?.duration]);
+  }, [data?.isPlaying, data?.duration]); // Removed data?.progress from dependencies
 
   const formatTime = (ms: number) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -169,13 +185,15 @@ export function SpotifyNowPlaying() {
           </div>
         </a>
 
-        {/* Progress Bar - Always visible but only active when playing */}
-        <div className="relative w-full h-1 bg-muted/50">
-          <div 
-            className="h-full bg-foreground transition-all duration-300"
-            style={{ width: data.isPlaying ? `${Math.min(progressPercent, 100)}%` : '0%' }}
-          />
-        </div>
+        {/* Progress Bar - Shows current progress */}
+        {data.duration && (
+          <div className="relative w-full h-1 bg-muted/50">
+            <div 
+              className={`h-full bg-foreground ${data.isPlaying ? 'transition-all duration-1000' : 'transition-all duration-300'}`}
+              style={{ width: `${Math.min(progressPercent, 100)}%` }}
+            />
+          </div>
+        )}
       </div>
     </motion.div>
   );
