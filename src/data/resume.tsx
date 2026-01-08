@@ -129,8 +129,8 @@ export const DATA = {
           icon: <Icons.github className="size-5" />,
         },
       ],
-      image: "/vibechat.png",
-      video: "",
+      image: "",
+      video: "/vibechat.mp4",
     },
     {
       slug: "porsche-911",
