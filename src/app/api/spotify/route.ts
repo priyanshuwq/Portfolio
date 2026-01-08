@@ -10,8 +10,9 @@ export async function GET() {
   try {
     const response = await getNowPlaying();
 
-    // Nothing playing, try recently played
+    // Nothing playing (204) or error, try recently played
     if (response.status === 204 || response.status > 400) {
+      console.log('[Spotify API] No active playback, fetching recently played');
       try {
         const recentResponse = await getRecentlyPlayed();
         
@@ -25,7 +26,7 @@ export async function GET() {
               album: track.album.name,
               albumImageUrl: track.album.images[0].url,
               artist: track.artists.map((artist: any) => artist.name).join(', '),
-              isPlaying: false,
+              isPlaying: false, // Explicitly mark as not playing
               songUrl: track.external_urls.spotify,
               title: track.name,
               playedAt: recentData.items[0].played_at,
@@ -35,40 +36,53 @@ export async function GET() {
             };
             
             writeCache(trackData);
+            console.log('[Spotify API] Returning recently played:', track.name);
             return NextResponse.json(trackData);
           }
         }
       } catch (error) {
-        // Silent fallback to cache
+        console.error('[Spotify API] Error fetching recently played:', error);
       }
       
+      // Fallback to cache but mark as not playing
       const cached = readCache();
-      return NextResponse.json(cached || { isPlaying: false });
+      if (cached) {
+        const notPlayingCache = { ...cached, isPlaying: false };
+        return NextResponse.json(notPlayingCache);
+      }
+      return NextResponse.json({ isPlaying: false });
     }
 
     const song = await response.json();
 
     if (!song.item) {
+      console.log('[Spotify API] No item in response');
       const cached = readCache();
-      return NextResponse.json(cached || { isPlaying: false });
+      if (cached) {
+        return NextResponse.json({ ...cached, isPlaying: false });
+      }
+      return NextResponse.json({ isPlaying: false });
     }
 
+    // Always respect the is_playing status from Spotify API
     const trackData = {
       album: song.item.album.name,
       albumImageUrl: song.item.album.images[0].url,
       artist: song.item.artists.map((_artist: any) => _artist.name).join(', '),
-      isPlaying: song.is_playing,
+      isPlaying: song.is_playing, // Use actual playback status
       songUrl: song.item.external_urls.spotify,
       title: song.item.name,
-      progress: song.progress_ms,
+      progress: song.progress_ms || 0,
       duration: song.item.duration_ms,
       cachedAt: Date.now(),
     };
     
+    console.log('[Spotify API] Current track:', song.item.name, 'Playing:', song.is_playing);
     writeCache(trackData);
     return NextResponse.json(trackData);
   } catch (error) {
-    // Return cached data on any error
+    console.error('[Spotify API] Error:', error);
+    // Return cached data but mark as not playing on error
     const cached = readCache();
     if (cached) {
       return NextResponse.json({ ...cached, isPlaying: false });
