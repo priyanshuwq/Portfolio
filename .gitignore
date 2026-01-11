@@ -51,3 +51,6 @@ visitors-count.json
 scripts/
 SPOTIFY_SETUP.md
 .git.old.backup
+
+# local settings
+.vscode/
