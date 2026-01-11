@@ -192,7 +192,6 @@ export const DATA = {
       video: "/Authentiscan.mp4",
     },
   ],
-  hackathons: [],
   blogs: [
     {
       title: "WebRTC",
