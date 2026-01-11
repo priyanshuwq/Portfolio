@@ -4,8 +4,10 @@ const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
 
-if (!client_id || !client_secret || !refresh_token) {
-  console.error('[Spotify] Missing credentials');
+const credentialsAvailable = !!(client_id && client_secret && refresh_token);
+
+if (!credentialsAvailable) {
+  console.warn('[Spotify] Missing credentials - Spotify features will be disabled');
 }
 
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
@@ -17,6 +19,11 @@ const RECENTLY_PLAYED_ENDPOINT = 'https://api.spotify.com/v1/me/player/recently-
 let tokenCache: { token: string; expiresAt: number } | null = null;
 
 const getAccessToken = async () => {
+  // Check if credentials are available
+  if (!credentialsAvailable) {
+    throw new Error('SPOTIFY_CREDENTIALS_MISSING');
+  }
+
   // Return cached token if still valid
   if (tokenCache && tokenCache.expiresAt > Date.now()) {
     return tokenCache.token;
