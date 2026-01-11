@@ -49,4 +49,5 @@ visitors-count.json
 
 # scripts and documentation
 scripts/
-SPOTIFY_SETUP.md.git.old.backup
+SPOTIFY_SETUP.md
+.git.old.backup
