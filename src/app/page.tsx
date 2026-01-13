@@ -43,7 +43,7 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY}>
             <div className="relative w-full h-40 sm:h-60 md:h-70 overflow-hidden bg-muted rounded-2xl">
               <Image
-                src="/Banner.jpeg"
+                src="/herosection/Banner.jpeg"
                 alt="Profile Banner"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -206,7 +206,7 @@ export default function Page() {
             <BlurFade delay={BLUR_FADE_DELAY * 4}>
               <div className="flex flex-col gap-2 mt-6">
                 <div className="flex gap-2">
-                  <Link href="/Priyanshu_Resume.pdf" target="_blank">
+                  <Link href="/resume/Priyanshu_Resume.pdf" target="_blank">
                     <Button variant="outline" className="gap-2 h-9 text-sm">
                       <FileText className="size-3.5" />
                       Resume / CV
