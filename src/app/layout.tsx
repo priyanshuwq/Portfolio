@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: DATA.name,
     images: [
       {
-        url: "/preview.png",
+        url: "/herosection/preview.png",
         width: 1200,
         height: 630,
         alt: `${DATA.name} - FullStack Developer`,
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: DATA.name,
     description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
     creator: "@priyanshuwq",
-    images: ["/preview.png"],
+    images: ["/herosection/preview.png"],
   },
   robots: {
     index: true,
