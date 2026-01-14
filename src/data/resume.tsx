@@ -150,7 +150,7 @@ export const DATA = {
       links: [
         {
           type: "Website",
-          href: "https://porschegt.vercel.app",
+          href: "#",
           icon: <Icons.globe className="size-5" />,
         },
         {
