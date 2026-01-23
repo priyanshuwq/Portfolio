@@ -11,7 +11,7 @@
   src: url('/fonts/Secretoria.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @layer base {
