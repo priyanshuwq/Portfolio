@@ -13,7 +13,7 @@ export function SimpleFooter() {
           {/* Footer Text */}
           <div className="flex flex-col items-center gap-1 text-center">
             <p className="text-sm text-muted-foreground">
-              Designed & Developed by <span className="font-semibold text-foreground">{DATA.name}</span>
+              Developed with <span className="inline-block" style={{ filter: 'grayscale(100%)', opacity: 0.5 }}>🤍</span> by <span className="font-semibold text-foreground">{DATA.name}</span>
             </p>
             <p className="text-xs text-muted-foreground">
               © {new Date().getFullYear()}. All rights reserved.
