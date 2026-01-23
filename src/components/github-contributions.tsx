@@ -119,7 +119,7 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
     <section className={className}>
       <div className="space-y-4">
 
-        <div className="relative w-full rounded-lg border bg-card">
+        <div className="relative w-full rounded-lg border bg-card overflow-hidden">
           <style>{`
             .react-activity-calendar__scroll-container {
               overflow: visible !important;
@@ -143,23 +143,25 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
               border-color: rgb(229, 231, 235) !important;
             }
             
-            /* Make calendar responsive to fit in container */
+            /* Make calendar fit in container */
             .react-activity-calendar {
               max-width: 100%;
             }
             
-
+            .react-activity-calendar svg {
+              overflow: visible !important;
+            }
             
             /* Mobile & Tablet: enable horizontal scroll, hide scrollbar */
             @media (max-width: 1024px) {
-              .github-calendar-mobile {
+              .github-calendar-wrapper {
                 overflow-x: auto;
                 overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none; /* Firefox */
                 -ms-overflow-style: none; /* IE and Edge */
               }
-              .github-calendar-mobile::-webkit-scrollbar {
+              .github-calendar-wrapper::-webkit-scrollbar {
                 display: none; /* Chrome, Safari, Opera */
               }
               .react-activity-calendar text {
@@ -170,12 +172,14 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
               }
             }
             
-            /* Desktop: no scroll, fit all months in view */
+            /* Desktop: Properly handle overflow */
             @media (min-width: 1025px) {
-              .react-activity-calendar__scroll-container {
+              .github-calendar-wrapper {
                 overflow: visible !important;
+                margin-right: -1rem;
+                padding-right: 1rem;
               }
-              .github-calendar-mobile {
+              .react-activity-calendar__scroll-container {
                 overflow: visible !important;
               }
               .react-activity-calendar text {
@@ -183,6 +187,9 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
               }
               .react-activity-calendar {
                 font-size: 13px !important;
+              }
+              .react-activity-calendar svg {
+                overflow: visible !important;
               }
             }
           `}</style>
@@ -201,12 +208,12 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
 
           {shouldShowCalendar && (
             <motion.div
-              className="w-full p-4"
+              className="w-full py-6 px-4"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35 }}
             >
-              <div className="github-calendar-mobile">
+              <div className="github-calendar-wrapper">
                 <ActivityCalendar
                   data={calendarData}
                   blockSize={12}
