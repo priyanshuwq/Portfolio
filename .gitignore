@@ -53,4 +53,4 @@ SPOTIFY_SETUP.md
 .git.old.backup
 
 # local settings
-.vscode/src/components/among-us-follower.tsx
+.vscode/
