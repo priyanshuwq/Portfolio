@@ -74,7 +74,7 @@ export default function RootLayout({
         )}
         style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
       >
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider delayDuration={0}>
             <Navbar />
             <main className="flex-1">
