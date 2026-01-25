@@ -25,7 +25,7 @@ export default function ContactPage() {
         </BlurFade>
             
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
-          <Card className="p-6 border-2">
+          <Card className="p-6 sm:p-8 max-w-3xl mx-auto">
             <form 
               action={`mailto:${DATA.contact.email}`}
               method="post"
