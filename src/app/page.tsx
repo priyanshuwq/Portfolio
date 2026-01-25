@@ -22,6 +22,8 @@ import { Card } from "@/components/ui/card";
 import { SkillIcon } from "@/components/skill-icons";
 import { SpotifyNowPlaying } from "@/components/spotify-now-playing";
 import { AnimatedTitle } from "@/components/animated-title";
+import { ToolsMarquee } from "@/components/tools-marquee";
+import { PfpAvatar } from "@/components/pfp-avatar";
 
 const GitHubContributions = lazy(() => 
   import("@/components/github-contributions").then(mod => ({ default: mod.GitHubContributions }))
@@ -67,16 +69,9 @@ export default function Page() {
             {/* Avatar - Aligned to left edge of banner */}
             <BlurFade delay={BLUR_FADE_DELAY * 1.5}>
               <div className="absolute left-0 -mt-8 sm:-mt-16 z-10">
-                <Avatar className="w-20 h-20 sm:w-32 sm:h-32 rounded-none drop-shadow-xl">
-                  <AvatarImage alt={DATA.name} src={DATA.avatarUrl} className="object-contain" />
-                  <AvatarFallback>
-                    {DATA.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="w-20 h-20 sm:w-32 sm:h-32 rounded-none drop-shadow-xl overflow-visible">
+                  <PfpAvatar width={128} height={128} />
+                </div>
               </div>
             </BlurFade>
 
@@ -290,60 +285,40 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY * 13.5}>
             <div className="space-y-2">
               <h3 className="text-sm font-medium text-muted-foreground">About</h3>
-              <h2 className="text-4xl font-bold">Me</h2>
+              <h2 className="text-4xl font-bold">whoami</h2>
             </div>
           </BlurFade>
 
           <BlurFade delay={BLUR_FADE_DELAY * 14}>
             <div className="flex flex-col md:flex-row gap-8 items-start max-w-[800px] mx-auto">
               {/* Profile Image */}
-              {/* <div className="shrink-0">
-                <div className="w-48 h-48 rounded-lg overflow-hidden bg-primary">
-                  <Avatar className="w-full h-full rounded-lg">
-                    <AvatarImage alt="Priyanshu Shekhar Singh" src={DATA.avatarUrl} className="object-cover" />
-                    <AvatarFallback className="rounded-lg text-4xl">PSS</AvatarFallback>
-                  </Avatar>
+              <div className="shrink-0">
+                <div className="w-56 h-56 rounded-2xl overflow-visible relative">
+                  <PfpAvatar width={224} height={224} />
                 </div>
-              </div> */}
+              </div>
 
-              {/* Info */}
+              {/* whoami */}
               <div className="flex-1 space-y-4">
                 <div>
-                  <h3 className="text-2xl font-bold mb-2">Priyanshu Shekhar Singh</h3>
+                  <h3 className="text-2xl mb-3">Priyanshu Shekhar Singh, 21</h3>
                   <div className="space-y-3 text-muted-foreground text-sm leading-relaxed">
                     <p>
-                      I'm a Full Stack Web Developer and Open Source Contributor passionate about crafting exceptional digital experiences. With expertise in the MERN stack and modern frameworks like Next.js, I specialize in building scalable web applications that solve real-world problems.
+                      Full-Stack Web Developer and open-source contributor building clean, user-friendly interfaces. I follow one rule: make every project better than the last.
                     </p>
                     <p>
-                      My journey in software development is driven by curiosity and a love for learning. I thrive on tackling complex challenges, from implementing real-time features with WebRTC and Socket.io to creating immersive 3D experiences with Three.js. Each project is an opportunity to push boundaries and deliver impactful solutions.
-                    </p>
-                    <p>
-                      When I'm not coding, you'll find me contributing to open source projects, exploring new technologies, or sharing knowledge with the developer community. I believe in writing clean, maintainable code and building products that make a difference.
+                      Participated in Smart India Hackathon — learned teamwork, coordination, and growth through challenges. I believe in building in public and learning through consistency.
                     </p>
                   </div>
                 </div>
-
-                {/* Skills */}
-                <div>
-                  <h4 className="text-sm font-semibold mb-3">Skills</h4>
-                  <TooltipProvider>
-                    <div className="flex flex-wrap gap-2">
-                      {DATA.skills.slice(0, 6).map((skill) => (
-                        <Tooltip key={skill}>
-                          <TooltipTrigger asChild>
-                            <div className="group relative flex items-center justify-center w-5 h-5 transition-all duration-300 hover:scale-110 cursor-pointer">
-                              <SkillIcon skill={skill} />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-white text-black border border-gray-200 shadow-lg">
-                            <p className="font-medium">{skill}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      ))}
-                    </div>
-                  </TooltipProvider>
-                </div>
               </div>
+            </div>
+          </BlurFade>
+
+          {/* Tools Marquee */}
+          <BlurFade delay={BLUR_FADE_DELAY * 14.5}>
+            <div className="max-w-[800px] mx-auto mt-8">
+              <ToolsMarquee />
             </div>
           </BlurFade>
         </div>
@@ -352,6 +327,7 @@ export default function Page() {
       <section id="github">
         <div className="space-y-3 w-full py-8">
           <BlurFade delay={BLUR_FADE_DELAY * 15}>
+
             <div className="space-y-1">
               <div>
                 <h3 className="text-sm font-medium text-muted-foreground">Featured</h3>
