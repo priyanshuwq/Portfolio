@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
     // Detect if user is asking about real-time information
     const lastMessage = messages[messages.length - 1]?.content?.toLowerCase() || "";
-    const needsDynamicData = /spotify|music|listening|playing|song|track|github|repos?|repositories|commits?|contribution|visitors?|traffic|views?|stats|activity|recent/i.test(lastMessage);
+    const needsDynamicData = /spotify|music|listening|playing|song|track|github|repos?|repositories|commits?|contribution|visitor|visitors|traffic|view|views|count|stats|activity|recent/i.test(lastMessage);
 
     // Prepare context with dynamic data if needed
     let contextToUse = PORTFOLIO_CONTEXT;
