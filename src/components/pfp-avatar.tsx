@@ -15,14 +15,17 @@ const PFP_IMAGES = [
 export function PfpAvatar({ 
   width = 224, 
   height = 224,
+  interactive = true,
 }: {
   width?: number;
   height?: number;
+  interactive?: boolean;
 }) {
   const [currentCapIndex, setCurrentCapIndex] = useState(0);
   const [isChanging, setIsChanging] = useState(false);
 
   const handleCapChange = () => {
+    if (!interactive) return;
     setIsChanging(true);
     setTimeout(() => {
       setCurrentCapIndex((prev) => (prev + 1) % PFP_IMAGES.length);
@@ -32,13 +35,13 @@ export function PfpAvatar({
 
   return (
     <div 
-      className="relative cursor-pointer group"
+      className={`relative ${interactive ? "cursor-pointer group" : ""}`}
       onClick={handleCapChange}
     >
       <div className={`transition-all duration-300 ${isChanging ? "scale-95 opacity-80" : "scale-100 opacity-100"}`}>
         <Image
           alt="Priyanshu"
-          src={PFP_IMAGES[currentCapIndex]}
+          src={interactive ? PFP_IMAGES[currentCapIndex] : "/herosection/profile.png"}
           width={width}
           height={height}
           className="object-contain w-full h-full"
