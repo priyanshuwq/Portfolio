@@ -151,7 +151,7 @@ export async function getVisitorData() {
   }
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/visitors`, {
+    const response = await fetch('https://shekhr.dev/api/visitors', {
       cache: 'no-store',
     });
     
