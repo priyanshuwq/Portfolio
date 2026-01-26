@@ -246,13 +246,13 @@ export function ChatBot() {
                   </div>
                   <div
                     className={cn(
-                      "rounded-2xl px-4 py-2.5 max-w-[75%] text-sm",
+                      "rounded-2xl px-4 py-2.5 max-w-[75%] text-sm break-words",
                       message.role === "user"
                         ? "bg-primary text-primary-foreground rounded-tr-sm"
                         : "bg-muted rounded-tl-sm"
                     )}
                   >
-                    <div className="prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                    <div className="prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 break-words">
                       <ReactMarkdown
                         components={{
                           a: ({ node, ...props }) => (
@@ -261,7 +261,7 @@ export function ChatBot() {
                               target="_blank"
                               rel="noopener noreferrer"
                               className={cn(
-                                "font-medium underline transition-colors",
+                                "font-medium underline transition-colors break-all inline-block",
                                 message.role === "user" 
                                   ? "text-primary-foreground/90 hover:text-primary-foreground"
                                   : "text-primary hover:text-primary/80"
