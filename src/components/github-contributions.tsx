@@ -45,12 +45,20 @@ const extractActiveMonths = (days: ContributionDay[]) => {
 const filterCommittedMonths = (days: ContributionDay[]) => {
   if (days.length === 0) return [];
 
-  // Find the first month with contributions (e.g., August)
-  const firstContributionDate = days.find((day) => day.count > 0)?.date;
-  if (!firstContributionDate) return [];
-
-  // Filter to show from first contribution month onwards
-  return days.filter((day) => day.date >= firstContributionDate);
+  const today = new Date();
+  
+  // Show last 8 months of data to ensure current days are fully visible
+  const monthsToShow = 8;
+  const cutoffDate = new Date(today);
+  cutoffDate.setMonth(cutoffDate.getMonth() - monthsToShow);
+  
+  // Include all days from cutoff date through end of current month
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  
+  return days.filter((day) => {
+    const dayDate = new Date(day.date);
+    return dayDate >= cutoffDate && dayDate <= endOfMonth;
+  });
 };
 
 const mapToCalendarData = (days: ContributionDay[]): Activity[] => {
@@ -176,8 +184,6 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
             @media (min-width: 1025px) {
               .github-calendar-wrapper {
                 overflow: visible !important;
-                margin-right: -1rem;
-                padding-right: 1rem;
               }
               .react-activity-calendar__scroll-container {
                 overflow: visible !important;
