@@ -378,7 +378,7 @@ export const createAnimation = (
       name: `${variant}-${start}${blur ? '-blur' : ''}`,
       css: `
        ::view-transition-group(root) {
-        animation-duration: 2.2s;
+        animation-duration: 1.5s;
         animation-timing-function: var(--ease-smooth);
       }
             
@@ -432,7 +432,7 @@ export const createAnimation = (
       name: `${variant}-${start}${blur ? '-blur' : ''}`,
       css: `
        ::view-transition-group(root) {
-        animation-duration: 2.2s;
+        animation-duration: 1.5s;
         animation-timing-function: var(--ease-smooth);
       }
             
@@ -491,12 +491,12 @@ export const createAnimation = (
 
 ::view-transition-new(root) {
   mask: url('${url}') center / 0 no-repeat;
-  animation: scale 2.2s;
+  animation: scale 1.5s;
 }
 
 ::view-transition-old(root),
 .dark::view-transition-old(root) {
-  animation: scale 2.2s;
+  animation: scale 1.5s;
 }
 
 @keyframes scale {
@@ -528,13 +528,13 @@ export const createAnimation = (
         ::view-transition-new(root) {
           mask: url('${svg}') center / 0 no-repeat;
           mask-origin: content-box;
-          animation: scale 2.2s;
+          animation: scale 1.5s;
           transform-origin: center;
         }
 
         ::view-transition-old(root),
         .dark::view-transition-old(root) {
-          animation: scale 2.2s;
+          animation: scale 1.5s;
           transform-origin: center;
           z-index: -1;
         }
@@ -558,13 +558,13 @@ export const createAnimation = (
       ::view-transition-new(root) {
         mask: url('${svg}') ${start.replace('-', ' ')} / 0 no-repeat;
         mask-origin: content-box;
-        animation: scale 2.2s;
+        animation: scale 1.5s;
         transform-origin: ${transformOrigin};
       }
 
       ::view-transition-old(root),
       .dark::view-transition-old(root) {
-        animation: scale 2.2s;
+        animation: scale 1.5s;
         transform-origin: ${transformOrigin};
         z-index: -1;
       }
@@ -612,7 +612,7 @@ export const createAnimation = (
       name: `${variant}-${start}${blur ? '-blur' : ''}`,
       css: `
       ::view-transition-group(root) {
-        animation-duration: 2.2s;
+        animation-duration: 1.5s;
         animation-timing-function: var(--ease-smooth);
       }
             
@@ -689,7 +689,7 @@ export const createAnimation = (
       name: `${variant}-${start}${blur ? '-blur' : ''}`,
       css: `
        ::view-transition-group(root) {
-        animation-duration: 2.2s;
+        animation-duration: 1.5s;
         animation-timing-function: var(--ease-smooth);
       }
             
@@ -746,13 +746,13 @@ export const createAnimation = (
       ::view-transition-new(root) {
         mask: url('${svg}') ${start.replace('-', ' ')} / 0 no-repeat;
         mask-origin: content-box;
-        animation: scale-${start}${blur ? '-blur' : ''} 2.2s;
+        animation: scale-${start}${blur ? '-blur' : ''} 1.5s;
         transform-origin: ${transformOrigin};
         ${blur ? 'filter: blur(1.5px);' : ''}
       }
       ::view-transition-old(root),
       .dark::view-transition-old(root) {
-        animation: scale-${start}${blur ? '-blur' : ''} 2.2s;
+        animation: scale-${start}${blur ? '-blur' : ''} 1.5s;
         transform-origin: ${transformOrigin};
         z-index: -1;
       }
