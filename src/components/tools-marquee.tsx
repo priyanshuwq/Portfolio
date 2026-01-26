@@ -63,22 +63,30 @@ const tools: Tool[] = [
   { name: "Postman", icon: siPostman },
 ];
 
+// Combine all tech stack into one array
+const allTech = [...languages, ...tools];
+
+// Split into two rows equally
+const midPoint = Math.ceil(allTech.length / 2);
+const row1Tech = allTech.slice(0, midPoint);
+const row2Tech = allTech.slice(midPoint);
+
 // Duplicate arrays multiple times for seamless infinite loop
-const duplicatedLanguages = [...languages, ...languages, ...languages, ...languages, ...languages, ...languages];
-const duplicatedTools = [...tools, ...tools, ...tools, ...tools];
+const duplicatedRow1 = Array(8).fill(row1Tech).flat();
+const duplicatedRow2 = Array(8).fill(row2Tech).flat();
 
 const ToolBadge = ({ tool }: { tool: Tool }) => {
   return (
-    <div className="flex items-center gap-2.5 px-5 py-2.5 bg-muted/30 backdrop-blur-sm rounded-full border border-border/40 whitespace-nowrap hover:bg-muted/50 hover:border-border/60 transition-all duration-300">
+    <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-muted/30 backdrop-blur-sm rounded-full border border-border/40 whitespace-nowrap hover:bg-muted/50 hover:border-border/60 transition-all duration-300">
       <svg
         role="img"
         viewBox="0 0 24 24"
-        className="w-4 h-4 shrink-0 fill-current opacity-90"
+        className="w-3 h-3 sm:w-4 sm:h-4 shrink-0 fill-current opacity-90"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path d={tool.icon.path} />
       </svg>
-      <span className="text-xs font-medium tracking-wide">{tool.name}</span>
+      <span className="text-[10px] sm:text-xs font-medium tracking-wide">{tool.name}</span>
     </div>
   );
 };
@@ -91,20 +99,20 @@ export function ToolsMarquee() {
         <p className="text-xs text-muted-foreground">Technologies I work with</p>
       </div>
 
-      {/* Row 1: Languages - Right to Left */}
+      {/* Row 1: First Half - Right to Left */}
       <div className="relative overflow-hidden py-1">
-        <div className="flex gap-3 animate-marquee-rtl hover:[animation-play-state:paused]">
-          {duplicatedLanguages.map((tool, index) => (
-            <ToolBadge key={`lang-${index}`} tool={tool} />
+        <div className="flex gap-2 sm:gap-3 animate-marquee-rtl hover:[animation-play-state:paused]">
+          {duplicatedRow1.map((tool, index) => (
+            <ToolBadge key={`row1-${index}`} tool={tool} />
           ))}
         </div>
       </div>
 
-      {/* Row 2: Tools - Left to Right */}
+      {/* Row 2: Second Half - Left to Right */}
       <div className="relative overflow-hidden py-1">
-        <div className="flex gap-3 animate-marquee-ltr hover:[animation-play-state:paused]">
-          {duplicatedTools.map((tool, index) => (
-            <ToolBadge key={`tool-${index}`} tool={tool} />
+        <div className="flex gap-2 sm:gap-3 animate-marquee-ltr hover:[animation-play-state:paused]">
+          {duplicatedRow2.map((tool, index) => (
+            <ToolBadge key={`row2-${index}`} tool={tool} />
           ))}
         </div>
       </div>
