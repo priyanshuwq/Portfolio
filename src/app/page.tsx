@@ -293,7 +293,7 @@ export default function Page() {
             <div className="flex flex-col md:flex-row gap-8 items-start max-w-[800px] mx-auto">
               {/* Profile Image */}
               <div className="shrink-0">
-                <div className="w-56 h-56 rounded-2xl overflow-visible relative">
+                <div className="w-56 h-56 rounded-2xl overflow-visible relative bg-muted">
                   <PfpAvatar width={224} height={224} />
                 </div>
               </div>
@@ -301,7 +301,7 @@ export default function Page() {
               {/* whoami */}
               <div className="flex-1 space-y-4">
                 <div>
-                  <h3 className="text-2xl mb-3">Priyanshu Shekhar Singh, 21</h3>
+                  <h3 className="text-2xl mb-3">Priyanshu Shekhar Singh</h3>
                   <div className="space-y-3 text-muted-foreground text-sm leading-relaxed">
                     <p>
                       Full-Stack Web Developer and open-source contributor building clean, user-friendly interfaces. I follow one rule: make every project better than the last.
