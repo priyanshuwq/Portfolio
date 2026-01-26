@@ -207,11 +207,11 @@ canvas {
 }
 
 .animate-marquee-ltr {
-  animation: marquee-ltr 20s linear infinite;
+  animation: marquee-ltr 10s linear infinite;
   will-change: transform;
 }
 
 .animate-marquee-rtl {
-  animation: marquee-rtl 20s linear infinite;
+  animation: marquee-rtl 10s linear infinite;
   will-change: transform;
 }
