@@ -252,7 +252,7 @@ export function ChatBot() {
                         : "bg-muted rounded-tl-sm"
                     )}
                   >
-                    <div className="prose prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                    <div className="prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                       <ReactMarkdown
                         components={{
                           a: ({ node, ...props }) => (
