@@ -1,6 +1,7 @@
 import { createGroq } from "@ai-sdk/groq";
 import { streamText } from "ai";
 import { PORTFOLIO_CONTEXT } from "@/lib/portfolio-context";
+import { getAllDynamicData, formatDynamicDataForAI } from "@/lib/dynamic-data";
 
 export async function POST(req: Request) {
   try {
@@ -19,9 +20,26 @@ export async function POST(req: Request) {
 
     const { messages } = await req.json();
 
+    // Detect if user is asking about real-time information
+    const lastMessage = messages[messages.length - 1]?.content?.toLowerCase() || "";
+    const needsDynamicData = /spotify|music|listening|playing|song|track|github|repos?|repositories|commits?|contribution|visitors?|traffic|views?|stats|activity|recent/i.test(lastMessage);
+
+    // Prepare context with dynamic data if needed
+    let contextToUse = PORTFOLIO_CONTEXT;
+    if (needsDynamicData) {
+      try {
+        const dynamicData = await getAllDynamicData();
+        const dynamicContext = formatDynamicDataForAI(dynamicData);
+        contextToUse = `${PORTFOLIO_CONTEXT}\n\n${dynamicContext}`;
+      } catch (error) {
+        console.error("Error fetching dynamic data:", error);
+        // Continue with static context only
+      }
+    }
+
     const result = streamText({
-      model: groq("llama-3.3-70b-versatile"),
-      system: PORTFOLIO_CONTEXT,
+      model: groq("llama-3.1-8b-instant"),
+      system: contextToUse,
       messages,
       temperature: 0.7,
     });
