@@ -294,7 +294,7 @@ export default function Page() {
               {/* Profile Image */}
               <div className="shrink-0">
                 <div className="w-56 h-56 rounded-2xl overflow-visible relative bg-muted">
-                  <PfpAvatar width={224} height={224} />
+                  <PfpAvatar width={224} height={224} interactive={false} />
                 </div>
               </div>
 
