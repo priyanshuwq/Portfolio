@@ -201,7 +201,7 @@ export default function Page() {
             <BlurFade delay={BLUR_FADE_DELAY * 4}>
               <div className="flex flex-col gap-2 mt-6">
                 <div className="flex gap-2">
-                  <Link href="/resume/Priyanshu_Resume.pdf" target="_blank">
+                  <Link href="/resume/Priyanshu_Resume.pdf?v=2" target="_blank">
                     <Button variant="outline" className="gap-2 h-9 text-sm">
                       <FileText className="size-3.5" />
                       Resume / CV
