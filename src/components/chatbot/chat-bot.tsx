@@ -53,6 +53,16 @@ export function ChatBot() {
     }
   }, [messages, isOpen]);
 
+  // Listen for custom event to toggle chatbot
+  useEffect(() => {
+    const handleToggleChatbot = () => {
+      setIsOpen((prev) => !prev);
+    };
+    
+    window.addEventListener('toggle-chatbot', handleToggleChatbot);
+    return () => window.removeEventListener('toggle-chatbot', handleToggleChatbot);
+  }, []);
+
   const handleScroll = () => {
     if (messagesContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;

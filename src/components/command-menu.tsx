@@ -24,7 +24,8 @@ import {
   Twitter,
   MessageCircle,
   Moon,
-  BookOpen
+  BookOpen,
+  Bot
 } from "lucide-react";
 import { DATA } from "@/data/resume";
 
@@ -138,6 +139,17 @@ export function CommandMenu() {
               <span>Toggle Theme</span>
               <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
                 T
+              </kbd>
+            </CommandItem>
+            <CommandItem
+              onSelect={() => runCommand(() => {
+                window.dispatchEvent(new CustomEvent('toggle-chatbot'));
+              })}
+            >
+              <Bot className="mr-2 h-4 w-4" />
+              <span>Open Chatbot</span>
+              <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                A
               </kbd>
             </CommandItem>
           </CommandGroup>
@@ -266,6 +278,12 @@ export function useKeyboardShortcuts() {
           if (!isTyping()) {
             e.preventDefault();
             window.open(DATA.contact.social.Reddit.url, "_blank");
+          }
+          break;
+        case "a":
+          if (!isTyping()) {
+            e.preventDefault();
+            window.dispatchEvent(new CustomEvent('toggle-chatbot'));
           }
           break;
       }
