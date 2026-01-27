@@ -63,9 +63,6 @@ export const DATA = {
       },
     },
   },
-
-  work: [],
-  education: [],
   projects: [
     {
       slug: "audora",
