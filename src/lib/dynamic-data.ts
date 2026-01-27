@@ -84,7 +84,7 @@ export async function getSpotifyData() {
   }
 }
 
-// Fetch GitHub stats
+// Fetch GitHub stats + contributions
 export async function getGitHubData() {
   // Return cached data if valid
   if (isCacheValid() && dataCache.github) {
@@ -118,12 +118,65 @@ export async function getGitHubData() {
     );
     
     const repos = await reposResponse.json();
+
+    // Fetch contribution data via GraphQL
+    let contributions = null;
+    if (token) {
+      const today = new Date();
+      const start = new Date(today);
+      start.setDate(start.getDate() - 364);
+
+      const contribQuery = `
+        query ($login: String!, $from: DateTime!, $to: DateTime!) {
+          user(login: $login) {
+            contributionsCollection(from: $from, to: $to) {
+              contributionCalendar { totalContributions }
+              totalCommitContributions
+              totalIssueContributions
+              totalPullRequestContributions
+              totalPullRequestReviewContributions
+            }
+          }
+        }
+      `;
+
+      try {
+        const contribResponse = await fetch('https://api.github.com/graphql', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: contribQuery,
+            variables: { login: username, from: start.toISOString(), to: today.toISOString() },
+          }),
+        });
+
+        if (contribResponse.ok) {
+          const contribData = await contribResponse.json();
+          const collection = contribData?.data?.user?.contributionsCollection;
+          if (collection) {
+            contributions = {
+              totalContributions: collection.contributionCalendar?.totalContributions || 0,
+              commits: collection.totalCommitContributions || 0,
+              issues: collection.totalIssueContributions || 0,
+              pullRequests: collection.totalPullRequestContributions || 0,
+              reviews: collection.totalPullRequestReviewContributions || 0,
+            };
+          }
+        }
+      } catch (e) {
+        console.error('[Dynamic Data] GitHub contributions error:', e);
+      }
+    }
     
     const githubData = {
       publicRepos: userData.public_repos,
       followers: userData.followers,
       following: userData.following,
       bio: userData.bio,
+      contributions,
       recentRepos: repos.slice(0, 3).map((repo: any) => ({
         name: repo.name,
         description: repo.description,
@@ -215,6 +268,14 @@ export function formatDynamicDataForAI(data: {
     context += `- Public Repositories: ${data.github.publicRepos}\n`;
     context += `- Followers: ${data.github.followers}\n`;
     context += `- Following: ${data.github.following}\n`;
+    
+    // Contribution stats (last 365 days)
+    if (data.github.contributions) {
+      const c = data.github.contributions;
+      context += `\n**Contributions (Last Year):**\n`;
+      context += `- Total: ${c.totalContributions} contributions\n`;
+      context += `- Commits: ${c.commits} | PRs: ${c.pullRequests} | Issues: ${c.issues} | Reviews: ${c.reviews}\n`;
+    }
     
     if (data.github.recentRepos && data.github.recentRepos.length > 0) {
       context += '\n**Recent Projects:**\n';
