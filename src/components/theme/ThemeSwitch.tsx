@@ -320,6 +320,29 @@ export const createAnimation = (
   
   // Use dynamic position for animation origin
   const animationOrigin = `${clickX}% ${clickY}%`;
+  
+  // Mobile-optimized styles - faster duration, no blur, hardware acceleration
+  const mobileOptimizations = `
+    @media (max-width: 768px), (prefers-reduced-motion: reduce) {
+      ::view-transition-group(root) {
+        animation-duration: 0.5s !important;
+      }
+      ::view-transition-new(root),
+      ::view-transition-old(root),
+      .dark::view-transition-new(root),
+      .dark::view-transition-old(root) {
+        filter: none !important;
+        will-change: clip-path, opacity;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-group(root) {
+        animation-duration: 0.3s !important;
+      }
+    }
+  `;
 
   if (variant === 'rectangle') {
     const getClipPath = (direction: AnimationStart) => {
@@ -424,6 +447,7 @@ export const createAnimation = (
           ${blur ? 'filter: blur(0px);' : ''}
         }
       }
+      ${mobileOptimizations}
       `,
     };
   }
@@ -478,6 +502,7 @@ export const createAnimation = (
           filter: blur(0px);
         }
       }
+      ${mobileOptimizations}
       `,
     };
   }
@@ -512,7 +537,8 @@ export const createAnimation = (
   100% {
     mask-size: 2000vmax;
   }
-}`,
+}
+${mobileOptimizations}`,
     };
   }
 
@@ -544,6 +570,7 @@ export const createAnimation = (
             mask-size: 350vmax;
           }
         }
+        ${mobileOptimizations}
         `,
       };
     }
@@ -574,6 +601,7 @@ export const createAnimation = (
           mask-size: 350vmax;
         }
       }
+      ${mobileOptimizations}
       `,
     };
   }
@@ -658,6 +686,7 @@ export const createAnimation = (
           ${blur ? 'filter: blur(0px);' : ''}
         }
       }
+      ${mobileOptimizations}
       `,
     };
   }
@@ -733,6 +762,7 @@ export const createAnimation = (
           ${blur ? 'filter: blur(0px);' : ''}
         }
       }
+      ${mobileOptimizations}
       `,
     };
   }
@@ -768,6 +798,7 @@ export const createAnimation = (
           ${blur ? 'filter: blur(0px);' : ''}
         }
       }
+      ${mobileOptimizations}
     `,
   };
 };
