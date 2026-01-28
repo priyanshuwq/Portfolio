@@ -325,7 +325,7 @@ export const createAnimation = (
   const mobileOptimizations = `
     @media (max-width: 768px), (prefers-reduced-motion: reduce) {
       ::view-transition-group(root) {
-        animation-duration: 2s !important;
+        animation-duration: 1.9s !important;
       }
       ::view-transition-new(root),
       ::view-transition-old(root),
