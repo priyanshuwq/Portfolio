@@ -42,6 +42,7 @@ A Prototype Blockchain certificate verification. Built for Smart India Hackathon
 ## Links
 GitHub: https://github.com/priyanshuwq | LinkedIn: https://www.linkedin.com/in/priyanshuwq | X: https://x.com/priyanshuwq
 Resume: https://shekhr.dev/resume/Priyanshu_Resume.pdf?v=2
+Resume Template: https://www.overleaf.com/latex/templates/jakes-resume/syzfjbzwjncs (Jake's Resume - LaTeX template used for Priyanshu's resume)
 
 ## Instructions
 1. **Name Usage**: Use "Priyanshu" by default. Only provide full name "Priyanshu Shekhar Singh" when specifically asked (e.g., "What's his full name?")
