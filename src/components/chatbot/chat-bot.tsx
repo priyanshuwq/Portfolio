@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import Image from "next/image";
 import { 
   MessageCircle, 
@@ -42,6 +43,7 @@ export function ChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -63,6 +65,33 @@ export function ChatBot() {
     return () => window.removeEventListener('toggle-chatbot', handleToggleChatbot);
   }, []);
 
+  // Auto-focus input on any keypress when chatbot is open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Ignore if already focused on input
+      if (document.activeElement === inputRef.current) return;
+      
+      // Ignore special keys, shortcuts, and modifiers
+      if (
+        e.ctrlKey ||
+        e.metaKey ||
+        e.altKey ||
+        e.key === 'Escape' ||
+        e.key === 'Tab' ||
+        e.key === 'Enter' ||
+        e.key.length > 1 // Arrow keys, F keys, etc.
+      ) return;
+
+      // Focus input and let the key press happen naturally
+      inputRef.current?.focus();
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isOpen]);
+
   const handleScroll = () => {
     if (messagesContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
@@ -73,6 +102,19 @@ export function ChatBot() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Handle clear command
+    if (input.trim() === "/clear") {
+      setMessages([
+        {
+          id: "welcome",
+          role: "assistant",
+          content: INITIAL_MESSAGE,
+        },
+      ]);
+      setInput("");
+      return;
+    }
 
     // Handle quick summary special command
     if (input === "show-quick-summary") {
@@ -190,7 +232,7 @@ export function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 z-50 flex flex-col w-[380px] h-[520px] rounded-2xl border bg-background shadow-2xl overflow-hidden max-[420px]:w-[calc(100vw-2rem)] max-[420px]:h-[calc(100vh-6rem)] max-[420px]:bottom-4 max-[420px]:right-4"
+            className="fixed bottom-6 right-6 z-50 flex flex-col w-[450px] h-[650px] rounded-2xl border bg-background shadow-2xl overflow-hidden max-[420px]:w-[calc(100vw-2rem)] max-[420px]:h-[calc(100vh-6rem)] max-[420px]:bottom-4 max-[420px]:right-4"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/30">
@@ -264,6 +306,7 @@ export function ChatBot() {
                   >
                     <div className="prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 break-words">
                       <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
                         components={{
                           a: ({ node, ...props }) => (
                             <a
@@ -369,6 +412,7 @@ export function ChatBot() {
               className="flex items-center gap-2 border-t p-4"
             >
               <input
+                ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
