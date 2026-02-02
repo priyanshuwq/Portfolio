@@ -104,3 +104,7 @@ src/
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+If you enjoy this portfolio or find it helpful, please consider starring the repo ⭐
