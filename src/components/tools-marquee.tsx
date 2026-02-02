@@ -27,6 +27,7 @@ import {
   siGoogle,
   siYoutube,
 } from "simple-icons";
+import { languages as languageNames, tools as toolNames } from "@/data/tools";
 
 interface Tool {
   name: string;
