@@ -54,3 +54,7 @@ SPOTIFY_SETUP.md
 
 # local settings
 .vscode/
+
+# Local development fixes (HDD mount workaround)
+fix-hdd-mount.sh
+HDD-MOUNT-FIX.md
