@@ -188,7 +188,66 @@ export const DATA = {
       image: "",
       video: "/authentiscan/Authentiscan.mp4",
     },
+       {
+      slug: "ReviewHub",
+      title: "ReviewHub",
+      dates: "December 2025",
+      active: true,
+      description:
+      "ReviewHub is a modern review platform that allows users to share their opinions and experiences on various products and services. With a sleek and intuitive interface, ReviewHub makes it easy for users to write and read reviews, helping them make informed decisions before making a purchase.",
+      technologies: [
+        "React",
+        "Javascript",
+        "nodejs",
+        "TailwindCSS",
+        "vercel",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "#",
+          icon: <Icons.globe className="size-5" />,
+        },
+        {
+           type: "Source",
+          href: "https://github.com/priyanshuwq/#",
+          icon: <Icons.github className="size-5" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+       {
+      slug: "Suburbia",
+      title: "Suburbia",
+      dates: "January 2025",
+      active: true,
+      description:
+      "A skateboarding 3D game built with Three.js, featuring realistic physics and immersive environments. Players can perform tricks, explore different skate parks, and compete in challenges.",
+      technologies: [
+        "React",
+        "Javascript",
+        "nodejs",
+        "TailwindCSS",
+        "vercel",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "#",
+          icon: <Icons.globe className="size-5" />,
+        },
+        {
+           type: "Source",
+          href: "https://github.com/priyanshuwq/#",
+          icon: <Icons.github className="size-5" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
   ],
+  
   blogs: [
     {
       title: "WebRTC",
