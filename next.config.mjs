@@ -12,6 +12,15 @@ const nextConfig = {
     qualities: [75, 90],
     formats: ['image/webp'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/privacy',
+        destination: 'https://github.com/priyanshuwq/portfolio/blob/main/privacy.md',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
