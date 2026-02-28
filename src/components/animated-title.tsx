@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const titles = ["FullStack Developer", "Open Source Contributor",];
+const titles = ["FullStack Developer", "21, Designer","Building Projects..."];
 
 export function AnimatedTitle() {
   const [currentIndex, setCurrentIndex] = useState(0);
