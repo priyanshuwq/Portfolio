@@ -44,7 +44,7 @@ export function PfpAvatar({
           src={interactive ? PFP_IMAGES[currentCapIndex] : "/herosection/profile.png"}
           width={width}
           height={height}
-          className="object-contain w-full h-full"
+          className="object-contain w-full h-full brightness-[0.95]"
           priority
         />
       </div>
