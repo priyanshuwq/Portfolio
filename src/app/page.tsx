@@ -45,7 +45,7 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY}>
             <div className="relative w-full h-40 sm:h-60 md:h-70 overflow-hidden bg-muted rounded-2xl">
               <Image
-                src="/herosection/Banner.jpeg"
+                src="/herosection/banner.jpeg"
                 alt="Profile Banner"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -53,12 +53,12 @@ export default function Page() {
                 priority
               />
               {/* Dark overlay */}
-              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute inset-0 bg-black/50" />
               
               {/* Lock In Text Overlay with improved styling */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-serif font-light tracking-[0.2em] text-white/40 mix-blend-overlay backdrop-blur-[1px]">
-                  Lock In
+                <h2 className="text-lg sm:text-lg md:text-lg font-serif font-light text-white/60 ">
+                  Written and Directed By
                 </h2>
               </div>
             </div>
