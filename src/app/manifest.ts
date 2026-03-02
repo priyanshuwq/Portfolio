@@ -14,7 +14,7 @@ export default function manifest(): MetadataRoute.Manifest {
         src: "/herosection/profile.png",
         sizes: "any",
         type: "image/png",
-        purpose: "any maskable",
+        purpose: "maskable",
       },
     ],
   };
