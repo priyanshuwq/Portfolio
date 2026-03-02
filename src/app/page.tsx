@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
-import { FileText, Send } from "lucide-react";
+import { FileText, CalendarDays } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import React, { Suspense, lazy } from "react";
@@ -24,6 +24,7 @@ import { SpotifyNowPlaying } from "@/components/spotify-now-playing";
 import { AnimatedTitle } from "@/components/animated-title";
 import { ToolsMarquee } from "@/components/tools-marquee";
 import { PfpAvatar } from "@/components/pfp-avatar";
+import { ContactSection } from "@/components/contact-section";
 
 const GitHubContributions = lazy(() => 
   import("@/components/github-contributions").then(mod => ({ default: mod.GitHubContributions }))
@@ -46,7 +47,7 @@ export default function Page() {
             <div className="relative w-full h-40 sm:h-60 md:h-70 overflow-hidden bg-muted rounded-2xl">
               <Image
                 src="/herosection/banner.jpeg"
-                alt="Profile Banner"
+                alt="Priyanshu Shekhar Singh - Full-Stack Developer Portfolio Banner"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
@@ -108,7 +109,7 @@ export default function Page() {
                               </Button>
                             </Link>
                           </TooltipTrigger>
-                          <TooltipContent className="bg-white text-black border border-gray-200 shadow-lg">
+                          <TooltipContent>
                             <p className="font-medium">{name}</p>
                           </TooltipContent>
                         </Tooltip>
@@ -127,7 +128,7 @@ export default function Page() {
                           </Button>
                         </Link>
                       </TooltipTrigger>
-                      <TooltipContent className="bg-white text-black border border-gray-200 shadow-lg">
+                      <TooltipContent>
                         <p className="font-medium">Email</p>
                       </TooltipContent>
                     </Tooltip>
@@ -207,10 +208,10 @@ export default function Page() {
                       Resume / CV
                     </Button>
                   </Link>
-                  <Link href="/contact">
+                  <Link href="https://cal.com/priyanshuwq" target="_blank" rel="noopener noreferrer">
                     <Button className="gap-2 h-9 text-sm">
-                      <Send className="size-3.5" />
-                      Contact
+                      <CalendarDays className="size-3.5" />
+                      Book a Call
                     </Button>
                   </Link>
                 </div>
@@ -387,6 +388,8 @@ export default function Page() {
         </div>
       </section>
       
+      <ContactSection />
+
       {/* Spotify Playlist */}
       {/* <section id="spotify">
         <div className="w-full py-1">
