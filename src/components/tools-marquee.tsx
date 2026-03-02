@@ -8,28 +8,20 @@ import {
   siHtml5,
   siCss,
   siTailwindcss,
-  siBootstrap,
   siMongodb,
   siNodedotjs,
   siReact,
   siNextdotjs,
   siExpress,
   siArchlinux,
-  siFfmpeg,
-  siObsidian,
-  siObsstudio,
-  siKdenlive,
   siStripe,
   siWebrtc,
   siSocketdotio,
   siPostman,
   siClerk,
   siGoogle,
-  siYoutube,
   siPostgresql,
-  siRedis,
   siFastapi,
-  siFirebase,
   siDocker,
   siGit,
   siGithub,
@@ -45,49 +37,7 @@ interface Tool {
   icon: any;
 }
 
-const languages: Tool[] = [
-  { name: "TypeScript", icon: siTypescript },
-  { name: "JavaScript", icon: siJavascript },
-  { name: "Python", icon: siPython },
-  { name: "HTML", icon: siHtml5 },
-  { name: "CSS", icon: siCss },
-];
-
-const tools: Tool[] = [
-  { name: "Tailwind CSS", icon: siTailwindcss },
-  { name: "Bootstrap", icon: siBootstrap },
-  { name: "MongoDB", icon: siMongodb },
-  { name: "Node.js", icon: siNodedotjs },
-  { name: "React", icon: siReact },
-  { name: "Next.js", icon: siNextdotjs },
-  { name: "Express", icon: siExpress },
-  { name: "Clerk", icon: siClerk },
-  { name: "Google OAuth", icon: siGoogle },
-  { name: "Arch Linux", icon: siArchlinux },
-  { name: "FFmpeg", icon: siFfmpeg },
-  { name: "yt-dlp", icon: siYoutube },
-  { name: "Obsidian", icon: siObsidian },
-  { name: "OBS Studio", icon: siObsstudio },
-  { name: "Kdenlive", icon: siKdenlive },
-  { name: "Stripe", icon: siStripe },
-  { name: "WebRTC", icon: siWebrtc },
-  { name: "Socket.io", icon: siSocketdotio },
-  { name: "Postman", icon: siPostman },
-];
-
-// Combine all tech stack into one array
-const allTech = [...languages, ...tools];
-
-// Split into two rows equally
-const midPoint = Math.ceil(allTech.length / 2);
-const row1Tech = allTech.slice(0, midPoint);
-const row2Tech = allTech.slice(midPoint);
-
-// Duplicate arrays multiple times for seamless infinite loop
-const duplicatedRow1 = Array(8).fill(row1Tech).flat();
-const duplicatedRow2 = Array(8).fill(row2Tech).flat();
-
-// Organized tech stack by category for full view
+// Organized tech stack by category — single source of truth
 const categorizedTech = {
   languages: [
     { name: "TypeScript", icon: siTypescript },
@@ -109,8 +59,6 @@ const categorizedTech = {
     { name: "Express", icon: siExpress },
     { name: "PostgreSQL", icon: siPostgresql },
     { name: "MongoDB", icon: siMongodb },
-    { name: "Redis", icon: siRedis },
-    { name: "Firebase", icon: siFirebase },
   ],
   infra: [
     { name: "Docker", icon: siDocker },
@@ -128,6 +76,18 @@ const categorizedTech = {
     { name: "Postman", icon: siPostman },
   ],
 };
+
+// Derive marquee items from the same source so both views are always in sync
+const allTech: Tool[] = Object.values(categorizedTech).flat();
+
+// Split into two rows equally
+const midPoint = Math.ceil(allTech.length / 2);
+const row1Tech = allTech.slice(0, midPoint);
+const row2Tech = allTech.slice(midPoint);
+
+// Duplicate arrays multiple times for seamless infinite loop
+const duplicatedRow1 = Array(8).fill(row1Tech).flat();
+const duplicatedRow2 = Array(8).fill(row2Tech).flat();
 
 const ToolBadge = ({ tool }: { tool: Tool }) => {
   return (
@@ -197,131 +157,25 @@ export function ToolsMarquee() {
 
       {/* Full Stack View */}
       {showFullStack && (
-        <div className="grid gap-8 mt-6 pb-4">
-          {/* Languages */}
-          <div>
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-              Languages
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {categorizedTech.languages.map((tech) => (
-                <div
-                  key={tech.name}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors border border-border/40"
-                >
-                  <svg
-                    role="img"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 shrink-0 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d={tech.icon.path} />
-                  </svg>
-                  <span className="text-sm font-medium">{tech.name}</span>
-                </div>
-              ))}
+        <div className="space-y-3 mt-4 pb-2">
+          {([
+            { label: "Languages",      items: categorizedTech.languages },
+            { label: "Frontend",       items: categorizedTech.frontend },
+            { label: "Backend & DB",   items: categorizedTech.backend },
+            { label: "Infra & Tools",  items: categorizedTech.infra },
+            { label: "APIs",           items: categorizedTech.tools },
+          ] as { label: string; items: { name: string }[] }[]).map(({ label, items }) => (
+            <div key={label} className="flex gap-4 text-sm">
+              <span className="w-28 shrink-0 text-xs text-muted-foreground pt-0.5">{label}</span>
+              <span className="text-foreground/80 leading-relaxed">
+                {items.map((t, i) => (
+                  <span key={t.name}>
+                    {t.name}{i < items.length - 1 && <span className="text-muted-foreground/50 mx-1">·</span>}
+                  </span>
+                ))}
+              </span>
             </div>
-          </div>
-
-          {/* Frontend */}
-          <div>
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-              Frontend
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {categorizedTech.frontend.map((tech) => (
-                <div
-                  key={tech.name}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors border border-border/40"
-                >
-                  <svg
-                    role="img"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 shrink-0 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d={tech.icon.path} />
-                  </svg>
-                  <span className="text-sm font-medium">{tech.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Backend & DB */}
-          <div>
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-              Backend & DB
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {categorizedTech.backend.map((tech) => (
-                <div
-                  key={tech.name}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors border border-border/40"
-                >
-                  <svg
-                    role="img"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 shrink-0 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d={tech.icon.path} />
-                  </svg>
-                  <span className="text-sm font-medium">{tech.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Infra & Tools */}
-          <div>
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-              Infra & Tools
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {categorizedTech.infra.map((tech) => (
-                <div
-                  key={tech.name}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors border border-border/40"
-                >
-                  <svg
-                    role="img"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 shrink-0 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d={tech.icon.path} />
-                  </svg>
-                  <span className="text-sm font-medium">{tech.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Other Tools */}
-          <div>
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-              Integration & APIs
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {categorizedTech.tools.map((tech) => (
-                <div
-                  key={tech.name}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors border border-border/40"
-                >
-                  <svg
-                    role="img"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 shrink-0 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d={tech.icon.path} />
-                  </svg>
-                  <span className="text-sm font-medium">{tech.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       )}
     </div>

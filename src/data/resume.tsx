@@ -93,7 +93,7 @@ export const DATA = {
           icon: <Icons.github className="size-5" />,
         },
       ],
-      image: "",
+      image: "/audora/audora.png",
       video: "/audora/audora.mp4",
     },
 
@@ -126,7 +126,7 @@ export const DATA = {
           icon: <Icons.github className="size-5" />,
         },
       ],
-      image: "",
+      image: "/vibechat/vibechat.png",
       video: "/vibechat/vibechat.mp4",
     },
     {
@@ -156,7 +156,7 @@ export const DATA = {
           icon: <Icons.github className="size-5" />,
         },
       ],
-      image: "",
+      image: "/porsche911/porsche911.gif",
       video: "/porsche911/Porsche911.mp4",
     },
     {
@@ -185,7 +185,7 @@ export const DATA = {
           icon: <Icons.github className="size-5" />,
         },
       ],
-      image: "",
+      image: "/authentiscan/authentiscan.png",
       video: "/authentiscan/Authentiscan.mp4",
     },
        {
