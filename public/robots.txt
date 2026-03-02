@@ -1,0 +1,12 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Crawl-delay
+Crawl-delay: 0
+
+# Sitemap location
+Sitemap: https://shekhr.dev/sitemap.xml
+
+# Block admin or private routes (if any in future)
+Disallow: /api/
