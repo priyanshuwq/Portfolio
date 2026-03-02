@@ -47,7 +47,7 @@ export function BlogCard({
           <div className="relative w-full h-56 overflow-hidden bg-muted">
             <Image
               src={image}
-              alt={title}
+              alt={`${title} - Blog Post by Priyanshu Shekhar Singh`}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />

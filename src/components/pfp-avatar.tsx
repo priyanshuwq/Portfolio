@@ -40,11 +40,11 @@ export function PfpAvatar({
     >
       <div className={`transition-all duration-300 ${isChanging ? "scale-95 opacity-80" : "scale-100 opacity-100"}`}>
         <Image
-          alt="Priyanshu"
+          alt="Priyanshu Shekhar Singh - Full-Stack Developer"
           src={interactive ? PFP_IMAGES[currentCapIndex] : "/herosection/profile.png"}
           width={width}
           height={height}
-          className="object-contain w-full h-full brightness-[0.95]"
+          className="object-contain w-full h-ful4678795l"
           priority
         />
       </div>
