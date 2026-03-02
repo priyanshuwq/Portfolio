@@ -33,9 +33,48 @@ export async function generateMetadata({
     };
   }
 
+  const projectUrl = `https://shekhr.dev/projects/${slug}`;
+  const imageUrl = (project as any).image || "/herosection/preview.png";
+
   return {
-    title: `${project.title} - ${DATA.name}`,
+    title: `${project.title} | Shekhr Dev Portfolio`,
     description: project.description,
+    keywords: [
+      project.title,
+      "Priyanshu Shekhar Singh",
+      "Shekhr Dev",
+      "Web Development Project",
+      "Full-Stack Project",
+      ...(project.technologies || []),
+    ],
+    authors: [{ name: "Priyanshu Shekhar Singh" }],
+    creator: "Priyanshu Shekhar Singh",
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: projectUrl,
+      title: `${project.title} | Shekhr Dev`,
+      description: project.description,
+      siteName: "Shekhr Dev Portfolio",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} - Project by Priyanshu Shekhar Singh`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} | Shekhr Dev`,
+      description: project.description,
+      creator: "@priyanshuwq",
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: projectUrl,
+    },
   };
 }
 
@@ -150,7 +189,7 @@ export default async function ProjectPage({
               ) : (project as any).image ? (
                 <Image
                   src={(project as any).image}
-                  alt={(project as any).title}
+                  alt={`${(project as any).title} - Project Screenshot | Shekhr Dev Portfolio`}
                   fill
                   className="object-cover"
                 />
