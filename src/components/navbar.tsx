@@ -3,7 +3,6 @@
 import { ThemeToggleButton } from "@/components/theme/ThemeSwitch";
 import { DATA } from "@/data/resume";
 import Link from "next/link";
-import { CommandMenu } from "@/components/command-menu";
 import { useEffect, useState } from "react";
 
 export default function Navbar() {
@@ -59,11 +58,6 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-
-          {/* Command Menu - Hidden on mobile */}
-          <div className="hidden sm:block">
-            <CommandMenu />
-          </div>
 
           {/* Theme Toggle */}
           <ThemeToggleButton />

@@ -29,7 +29,11 @@ import {
 } from "lucide-react";
 import { DATA } from "@/data/resume";
 
-export function CommandMenu() {
+interface CommandMenuProps {
+  variant?: "navbar" | "footer";
+}
+
+export function CommandMenu({ variant = "navbar" }: CommandMenuProps) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -39,6 +43,10 @@ export function CommandMenu() {
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+      if (e.key === "?" && !isTyping()) {
         e.preventDefault();
         setOpen((open) => !open);
       }
@@ -55,16 +63,29 @@ export function CommandMenu() {
 
   return (
     <>
-      {/* Keyboard Shortcut Button */}
-      <button
-        onClick={() => setOpen(true)}
-        className="inline-flex items-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground px-3 py-1.5 rounded-md text-xs font-medium gap-2"
-      >
-        <span className="hidden sm:inline-block text-muted-foreground">Quick Access</span>
-        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-          <span className="text-xs">⌘</span>K
-        </kbd>
-      </button>
+      {/* Trigger Button */}
+      {variant === "footer" ? (
+        <button
+          onClick={() => setOpen(true)}
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <span>press</span>
+          <kbd className="pointer-events-none inline-flex h-5 select-none items-center rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            ?
+          </kbd>
+          <span>for keybinds</span>
+        </button>
+      ) : (
+        <button
+          onClick={() => setOpen(true)}
+          className="inline-flex items-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground px-3 py-1.5 rounded-md text-xs font-medium gap-2"
+        >
+          <span className="hidden sm:inline-block text-muted-foreground">Quick Access</span>
+          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        </button>
+      )}
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <DialogTitle className="sr-only">Quick Access Menu</DialogTitle>
@@ -104,7 +125,10 @@ export function CommandMenu() {
               </kbd>
             </CommandItem>
             <CommandItem
-              onSelect={() => runCommand(() => router.push("/contact"))}
+              onSelect={() => runCommand(() => {
+                const el = document.getElementById("contact");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+              })}
             >
               <Mail className="mr-2 h-4 w-4" />
               <span>Go to Contact</span>
@@ -239,7 +263,8 @@ export function useKeyboardShortcuts() {
         case "c":
           if (!isTyping()) {
             e.preventDefault();
-            router.push("/contact");
+            const el = document.getElementById("contact");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
           }
           break;
         case "r":
