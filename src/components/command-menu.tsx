@@ -72,6 +72,16 @@ export function CommandMenu({ variant = "navbar" }: CommandMenuProps) {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
+  // Mobile "Ask about me" button — opens directly in AI mode
+  useEffect(() => {
+    const handler = () => {
+      setOpen(true);
+      setAiMode(true);
+    };
+    window.addEventListener("open-ai-chat", handler);
+    return () => window.removeEventListener("open-ai-chat", handler);
+  }, []);
+
   // Ctrl+j / Ctrl+k navigation in search mode only
   useEffect(() => {
     if (!open || aiMode) return;
@@ -245,10 +255,6 @@ export function CommandMenu({ variant = "navbar" }: CommandMenuProps) {
                 <span>Search</span>
               </button>
               <span className="text-muted-foreground/30 text-xs">·</span>
-              <span className="text-xs text-muted-foreground/70 flex items-center gap-1">
-                <Sparkles className="size-3 text-primary/70" />
-                Portfolio AI
-              </span>
             </div>
           )}
           <CommandInput
@@ -264,7 +270,7 @@ export function CommandMenu({ variant = "navbar" }: CommandMenuProps) {
 
         {/* ── AI Conversation Mode ───────────────────────────────────── */}
         {aiMode ? (
-          <div className="flex flex-col overflow-hidden" style={{ maxHeight: "400px" }}>
+          <div className="flex flex-col overflow-hidden max-h-[60dvh] sm:max-h-[400px]">
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {aiMessages.map((msg, i) =>
@@ -606,10 +612,9 @@ export function CommandMenu({ variant = "navbar" }: CommandMenuProps) {
                 onClick={backToSearch}
                 className="flex items-center gap-1 hover:text-foreground transition-colors"
               >
-                <ArrowLeft className="size-2.5" /> back to search
               </button>
               <span className="ml-auto text-primary/60 flex items-center gap-1">
-                <Sparkles className="size-3" /> Groq · llama-3.1
+                 Groq · llama-3.1
               </span>
             </>
           ) : (
@@ -622,9 +627,6 @@ export function CommandMenu({ variant = "navbar" }: CommandMenuProps) {
               </span>
               <span className="flex items-center gap-1">
                 <kbd className="border rounded px-1 font-mono">esc</kbd> close
-              </span>
-              <span className="ml-auto flex items-center gap-1 text-primary/70">
-                <Sparkles className="size-3" /> type a question → AI answers inline
               </span>
             </>
           )}

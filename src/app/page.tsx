@@ -383,7 +383,7 @@ export default function Page() {
                       <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                         <span className="text-sm font-medium text-foreground/90 group-hover:text-foreground leading-snug">{blog.title}</span>
                         {blog.status === "upcoming" && (
-                          <span className="text-[9px] font-medium border border-border rounded px-1.5 py-0.5 text-muted-foreground uppercase tracking-wide">soon</span>
+                          <span className="text-[9px] font-medium border border-border rounded px-1.5 py-0.5 text-muted-foreground uppercase tracking-wide"></span>
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{blog.description}</p>

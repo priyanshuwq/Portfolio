@@ -408,10 +408,10 @@ export function ChatBot() {
                       key={action.label}
                       onClick={() => handleQuickAction(action.prompt)}
                       className={cn(
-                        "rounded-full border px-3 py-1.5 text-xs font-medium transition-all",
+                        "rounded-full px-3 py-1.5 text-xs font-medium transition-all",
                         action.label === "Quick Summary"
-                          ? "bg-primary text-primary-foreground border-transparent hover:shadow-lg"
-                          : "bg-background border-border hover:bg-muted"
+                          ? "bg-primary text-primary-foreground border border-transparent hover:shadow-lg"
+                          : "bg-background border border-border hover:bg-muted"
                       )}
                     >
                       {action.label}

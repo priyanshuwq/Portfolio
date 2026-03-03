@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       system: contextToUse,
       messages,
       temperature: 0.2,
-      maxTokens: 400,
+      maxOutputTokens: 400,
     });
 
     return result.toTextStreamResponse();
