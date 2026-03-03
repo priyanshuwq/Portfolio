@@ -48,14 +48,14 @@ class Particle {
       const swirl_x = norm_y;
       const swirl_y = -norm_x;
 
-      const push_x = (norm_x + swirl_x * 1.5) * force * this.density;
-      const push_y = (norm_y + swirl_y * 1.5) * force * this.density;
+      const push_x = (norm_x + swirl_x * 2.5) * force * this.density * 2.0;
+      const push_y = (norm_y + swirl_y * 2.5) * force * this.density * 2.0;
 
       this.x -= push_x;
       this.y -= push_y;
     } else {
       // Return to original quickly and smoothly
-      const easeSpeed = this.density * 1.5;
+      const easeSpeed = this.density * 0.9;
       if (Math.abs(this.x - this.originX) > 0.05) this.x -= (this.x - this.originX) / easeSpeed;
       if (Math.abs(this.y - this.originY) > 0.05) this.y -= (this.y - this.originY) / easeSpeed;
     }
@@ -71,7 +71,9 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
   const [mounted, setMounted] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
-  const mouseRef = useRef({ x: -1000, y: -1000, radius: 45 }); // A healthy scatter radius
+  const mouseRef = useRef({ x: -1000, y: -1000, radius: 20 });
+  const currentRadiusRef = useRef(20);
+  const targetRadiusRef = useRef(20);
   const requestRef = useRef<number>(0);
 
   useEffect(() => {
@@ -131,14 +133,21 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
     ctx.scale(pixelRatio, pixelRatio);
 
     const isDark = resolvedTheme === "dark" || resolvedTheme === "system";
-    const fillStyle = isDark ? "#d4d4d4" : "#222222";
+    const fillStyle = isDark ? "#d4d4d4" : "#525252";
+    const particleAlpha = isDark ? 1 : 0.88;
+    const ringAlpha = isDark ? 0.4 : 0.3;
 
     // Adjust font scale relative to original viewBox height (399) vs physical canvas height (224)
     const fontScaleFactor = height / 399;
     const fontSize = Math.max(8.5 * fontScaleFactor, 4.5); // Ensure text does not get too tiny
 
     const animate = () => {
+      // Lerp radius toward target each frame
+      currentRadiusRef.current += (targetRadiusRef.current - currentRadiusRef.current) * 0.12;
+      mouseRef.current.radius = currentRadiusRef.current;
+
       ctx.clearRect(0, 0, width, height);
+      ctx.globalAlpha = particleAlpha;
       ctx.fillStyle = fillStyle;
 
       ctx.font = `${fontSize}px monospace`;
@@ -149,6 +158,20 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
         p.update(mouseRef.current);
         p.draw(ctx);
       });
+
+      // Draw visible cursor ring
+      const mouse = mouseRef.current;
+      if (mouse.x > -999) {
+        ctx.save();
+        ctx.globalAlpha = ringAlpha;
+        ctx.strokeStyle = fillStyle;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, currentRadiusRef.current, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
       requestRef.current = requestAnimationFrame(animate);
     };
 
@@ -170,6 +193,36 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
   const handleMouseLeave = () => {
     mouseRef.current.x = -1000;
     mouseRef.current.y = -1000;
+    targetRadiusRef.current = 20;
+  };
+
+  const handleMouseDown = () => {
+    targetRadiusRef.current = 80;
+  };
+
+  const handleMouseUp = () => {
+    targetRadiusRef.current = 20;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const rect = canvas.getBoundingClientRect();
+    mouseRef.current.x = touch.clientX - rect.left;
+    mouseRef.current.y = touch.clientY - rect.top;
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    targetRadiusRef.current = 80;
+    handleTouchMove(e);
+  };
+
+  const handleTouchEnd = () => {
+    mouseRef.current.x = -1000;
+    mouseRef.current.y = -1000;
+    targetRadiusRef.current = 20;
   };
 
   return (
@@ -179,6 +232,12 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseOut={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onTouchMove={handleTouchMove}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
       style={{ display: "block", touchAction: "none" }}
     />
   );
