@@ -25,8 +25,10 @@ import { AnimatedTitle } from "@/components/animated-title";
 import { ToolsMarquee } from "@/components/tools-marquee";
 import { PfpAvatar } from "@/components/pfp-avatar";
 import { ContactSection } from "@/components/contact-section";
+import { ParticleImage } from "@/components/particle-image";
 
-const GitHubContributions = lazy(() => 
+
+const GitHubContributions = lazy(() =>
   import("@/components/github-contributions").then(mod => ({ default: mod.GitHubContributions }))
 );
 const BLUR_FADE_DELAY = 0.04;
@@ -55,7 +57,7 @@ export default function Page() {
               />
               {/* Dark overlay */}
               <div className="absolute inset-0 bg-black/50" />
-              
+
               {/* Lock In Text Overlay with improved styling */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <h2 className="text-lg sm:text-lg md:text-lg font-serif font-light text-white/60 ">
@@ -219,7 +221,7 @@ export default function Page() {
             </BlurFade>
           </div>
 
-        {/* Spotify Now Playing - Full Width */}
+          {/* Spotify Now Playing - Full Width */}
           <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
             <div className="mt-6">
               <SpotifyNowPlaying />
@@ -294,8 +296,13 @@ export default function Page() {
             <div className="flex flex-col md:flex-row gap-8 items-start max-w-[800px] mx-auto">
               {/* Profile Image */}
               <div className="shrink-0">
-                <div className="w-56 h-56 rounded-2xl overflow-visible relative bg-muted">
-                  <PfpAvatar width={224} height={224} interactive={false} />
+                <div className="w-56 h-56 rounded-2xl overflow-visible relative">
+                  <ParticleImage
+                    src="/herosection/profile.svg"
+                    width={224}
+                    height={224}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
               </div>
 
@@ -339,20 +346,20 @@ export default function Page() {
               </div>
             </div>
           </BlurFade>
-        <BlurFade delay={BLUR_FADE_DELAY * 16}>
-          <Suspense fallback={
-            <div className="relative w-full overflow-x-auto overflow-y-hidden rounded-lg border bg-card p-4">
-              <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">
-                Loading contribution data…
+          <BlurFade delay={BLUR_FADE_DELAY * 16}>
+            <Suspense fallback={
+              <div className="relative w-full overflow-x-auto overflow-y-hidden rounded-lg border bg-card p-4">
+                <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">
+                  Loading contribution data…
+                </div>
               </div>
-            </div>
-          }>
-            <GitHubContributions username={githubUsername} onTotalLoad={setGithubTotal} />
-          </Suspense>
-        </BlurFade>
+            }>
+              <GitHubContributions username={githubUsername} onTotalLoad={setGithubTotal} />
+            </Suspense>
+          </BlurFade>
         </div>
       </section>
-      
+
       {/* Blog Section */}
       <section id="blogs">
         <div className="space-y-6 w-full">
@@ -369,7 +376,7 @@ export default function Page() {
               </Button>
             </div>
           </BlurFade>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {DATA.blogs.slice(0, 2).map((blog, id) => (
               <BlurFade key={blog.title} delay={BLUR_FADE_DELAY * 18 + id * 0.05}>
@@ -387,7 +394,7 @@ export default function Page() {
           </div>
         </div>
       </section>
-      
+
       <ContactSection />
 
       {/* Spotify Playlist */}

@@ -2,6 +2,7 @@
 
 import { DATA } from "@/data/resume";
 import { VisitorCounter } from "./visitor-counter";
+import { CommandMenu } from "./command-menu";
 
 export function SimpleFooter() {
   return (
@@ -14,8 +15,11 @@ export function SimpleFooter() {
               © {new Date().getFullYear()} Developed by <span className="font-medium text-foreground">{DATA.name.split(" ")[0]}</span>
             </p>
 
-            {/* Right: visitor counter */}
-            <VisitorCounter />
+            {/* Right: keybind hint + visitor counter */}
+            <div className="flex items-center gap-4">
+              <CommandMenu variant="footer" />
+              <VisitorCounter />
+            </div>
           </div>
         </div>
       </div>

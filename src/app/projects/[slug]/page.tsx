@@ -117,7 +117,7 @@ export default async function ProjectPage({
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
           <div className="space-y-4">
             {/* Title */}
-            <h1 className="text-4xl font-bold">{project.title}</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold">{project.title}</h1>
 
             {/* Description */}
             <p className="text-lg text-muted-foreground">{project.description}</p>
@@ -203,7 +203,7 @@ export default async function ProjectPage({
           <Card>
             <CardContent className="pt-6 space-y-6">
               <div>
-                <h2 className="text-2xl font-bold mb-4">Overview</h2>
+                <h2 className="text-xl sm:text-2xl font-bold mb-4">Overview</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   {content?.overview || project.description}
                 </p>
@@ -246,7 +246,7 @@ export default async function ProjectPage({
         <BlurFade delay={BLUR_FADE_DELAY * 5}>
           <Card>
             <CardContent className="pt-6">
-              <h2 className="text-2xl font-bold mb-4">Tech Stack</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">Tech Stack</h2>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech, idx) => (
                   <Badge key={idx} variant="secondary">
@@ -262,7 +262,7 @@ export default async function ProjectPage({
         {relatedProjects.length > 0 && (
           <BlurFade delay={BLUR_FADE_DELAY * 6}>
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Related Projects</h2>
+              <h2 className="text-xl sm:text-2xl font-bold">Related Projects</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {relatedProjects.map((relatedProject, idx) => (
                   <Link

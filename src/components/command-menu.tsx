@@ -42,10 +42,6 @@ export function CommandMenu({ variant = "navbar" }: CommandMenuProps) {
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
-      }
       if (e.key === "?" && !isTyping()) {
         e.preventDefault();
         setOpen((open) => !open);
