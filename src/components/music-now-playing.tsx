@@ -111,7 +111,7 @@ export function MusicNowPlaying() {
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
         <Link
-          href={track.songUrl || "#"}
+          href="https://www.last.fm/user/priynshuwq"
           target="_blank"
           rel="noopener noreferrer"
           className="group flex items-center gap-4 w-full rounded-2xl border border-border/30 bg-muted/40 hover:bg-muted/70 backdrop-blur-sm px-4 py-3 transition-colors duration-200"
@@ -140,7 +140,6 @@ export function MusicNowPlaying() {
           <div className="flex-1 min-w-0">
             <p className="text-[9px] uppercase tracking-widest text-muted-foreground/50 font-medium leading-none mb-1">
               {isPlaying ? "Now Playing" : "Last Played"}
-              <span className="normal-case not-italic opacity-60"> · priynshuwq</span>
             </p>
             <p className="text-sm font-semibold text-foreground/90 truncate leading-tight group-hover:text-foreground transition-colors">
               {track.title}
