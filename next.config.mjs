@@ -5,8 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i.scdn.co',
-        pathname: '/image/**',
+        hostname: 'lastfm.freetls.fastly.net',
       },
     ],
     qualities: [75, 90],

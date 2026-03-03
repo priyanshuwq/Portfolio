@@ -1,6 +1,6 @@
 import { createGroq } from "@ai-sdk/groq";
 import { streamText } from "ai";
-import { generatePortfolioContext } from "@/lib/portfolio-context";
+import { generatePortfolioContext, COMMON_INSTRUCTIONS } from "@/lib/portfolio-context";
 import { getAllDynamicData, formatDynamicDataForAI } from "@/lib/dynamic-data";
 
 export async function POST(req: Request) {
@@ -22,17 +22,17 @@ export async function POST(req: Request) {
 
     // Detect if user is asking about real-time information
     const lastMessage = messages[messages.length - 1]?.content?.toLowerCase() || "";
-    const needsDynamicData = /spotify|music|listening|playing|song|track|github|repos?|repositories|commits?|contribution|visitor|visitors|traffic|view|views|count|stats|activity|recent/i.test(lastMessage);
+    const needsDynamicData = /last\.?fm|spotify|music|listening|playing|song|track|scrobbl|github|repos?|repositories|commits?|contribution|visitor|visitors|traffic|view|views|count|stats|activity|recent/i.test(lastMessage);
 
     // Generate fresh context from resume data (always up-to-date)
-    let contextToUse = generatePortfolioContext();
+    let contextToUse = `${generatePortfolioContext()}\n\n${COMMON_INSTRUCTIONS}`;
     
-    // Add dynamic data if needed (Spotify, GitHub, etc.)
+    // Add dynamic data if needed (Music/Last.fm, GitHub, etc.)
     if (needsDynamicData) {
       try {
         const dynamicData = await getAllDynamicData();
         const dynamicContext = formatDynamicDataForAI(dynamicData);
-        contextToUse = `${contextToUse}\n\n${dynamicContext}`;
+        contextToUse = `${contextToUse}\n\n--- REAL-TIME DATA ---\n${dynamicContext}`;
       } catch (error) {
         console.error("Error fetching dynamic data:", error);
         // Continue with static context only
@@ -43,7 +43,8 @@ export async function POST(req: Request) {
       model: groq("llama-3.1-8b-instant"),
       system: contextToUse,
       messages,
-      temperature: 0.7,
+      temperature: 0.2,
+      maxTokens: 400,
     });
 
     return result.toTextStreamResponse();

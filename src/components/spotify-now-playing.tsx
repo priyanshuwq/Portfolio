@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaSpotify } from "react-icons/fa";
+import { FaLastfm } from "react-icons/fa";
 import { Play, Pause } from "lucide-react";
 
-interface SpotifyData {
+interface TrackData {
   isPlaying: boolean;
   title?: string;
   artist?: string;
@@ -14,75 +14,31 @@ interface SpotifyData {
   albumImageUrl?: string;
   songUrl?: string;
   playedAt?: string;
-  progress?: number;
-  duration?: number;
 }
 
 export function SpotifyNowPlaying() {
-  const [data, setData] = useState<SpotifyData | null>(null);
+  const [data, setData] = useState<TrackData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentProgress, setCurrentProgress] = useState(0);
-  const [lastSyncTime, setLastSyncTime] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch("/api/spotify");
         const json = await res.json();
-        
-        // Check if song changed or playback state changed
-        const songChanged = data?.title !== json.title;
-        const playbackChanged = data?.isPlaying !== json.isPlaying;
-        
         setData(json);
-        
-        // Always sync progress from API when song is playing
-        if (!json.isPlaying) {
-          setCurrentProgress(0);
-          setLastSyncTime(0);
-        } else if (json.progress !== undefined) {
-          // Sync progress for: song changes, playback changes, or regular updates
-          setCurrentProgress(json.progress);
-          setLastSyncTime(Date.now());
-        }
       } catch (error) {
-        console.error("Error fetching Spotify data", error);
+        console.error("Error fetching Last.fm data", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000); // Poll every 5 seconds to sync
-
+    // Poll every 30s — Last.fm scrobbles are not real-time millisecond data
+    const interval = setInterval(fetchData, 30_000);
     return () => clearInterval(interval);
-  }, []); // Empty dependencies - run once and keep polling
+  }, []);
 
-  // Update progress in real-time when playing (independent of data fetches)
-  useEffect(() => {
-    if (!data?.isPlaying || !data.duration) return;
-    
-    const progressInterval = setInterval(() => {
-      setCurrentProgress((prev) => {
-        const newProgress = prev + 1000; // Add 1 second
-        if (newProgress >= data.duration!) {
-          return data.duration!;
-        }
-        return newProgress;
-      });
-    }, 1000);
-
-    return () => clearInterval(progressInterval);
-  }, [data?.isPlaying, data?.duration, currentProgress]); // Track when progress resets
-
-  const formatTime = (ms: number) => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  // Show loading state instead of hiding completely
   if (loading) {
     return (
       <motion.div
@@ -92,7 +48,7 @@ export function SpotifyNowPlaying() {
         className="w-full"
       >
         <div className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border shadow-sm">
-          <div className="relative size-14 rounded-md overflow-hidden shrink-0 bg-muted animate-pulse" />
+          <div className="relative size-12 rounded-md overflow-hidden shrink-0 bg-muted animate-pulse" />
           <div className="flex flex-col gap-2 flex-1">
             <div className="h-3 bg-muted rounded animate-pulse w-16" />
             <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
@@ -103,7 +59,6 @@ export function SpotifyNowPlaying() {
     );
   }
 
-  // If no song data at all, show placeholder
   if (!data?.title) {
     return (
       <motion.div
@@ -119,8 +74,7 @@ export function SpotifyNowPlaying() {
     );
   }
 
-  const statusText = data.isPlaying ? "Now Playing" : "Last played";
-  const progressPercent = data.duration ? (currentProgress / data.duration) * 100 : 0;
+  const statusText = data.isPlaying ? "Now Scrobbling" : "Last Scrobbled";
 
   return (
     <motion.div
@@ -131,28 +85,34 @@ export function SpotifyNowPlaying() {
     >
       <div className="relative rounded-xl bg-card border border-border shadow-sm overflow-hidden">
         <a
-          href={data.songUrl || '#'}
+          href={data.songUrl || "#"}
           target="_blank"
           rel="noopener noreferrer"
           className="group relative flex items-center gap-3 p-3 hover:bg-accent/30 transition-all duration-300"
         >
           {/* Album Art */}
-          <div className="relative size-12 rounded-md overflow-hidden shrink-0">
-            <Image
-              src={data.albumImageUrl!}
-              alt={data.album!}
-              fill
-              sizes="48px"
-              loading="eager"
-              className="object-cover"
-            />
-            {/* Spotify Icon Overlay */}
+          <div className="relative size-12 rounded-md overflow-hidden shrink-0 bg-muted">
+            {data.albumImageUrl ? (
+              <Image
+                src={data.albumImageUrl}
+                alt={data.album ?? "Album art"}
+                fill
+                sizes="48px"
+                loading="eager"
+                className="object-cover"
+              />
+            ) : (
+              <div className="size-full flex items-center justify-center">
+                <FaLastfm className="size-5 text-[#d51007]" />
+              </div>
+            )}
+            {/* Last.fm icon overlay on hover */}
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <FaSpotify className="size-5 text-[#1DB954]" />
+              <FaLastfm className="size-5 text-[#d51007]" />
             </div>
           </div>
-          
-          {/* Song Info */}
+
+          {/* Track Info */}
           <div className="flex flex-col justify-center flex-1 min-w-0 gap-0.5">
             <span className="text-[9px] text-muted-foreground font-medium uppercase tracking-wider">
               {statusText}
@@ -165,7 +125,7 @@ export function SpotifyNowPlaying() {
             </span>
           </div>
 
-          {/* Play/Pause Button */}
+          {/* Play/Pause indicator */}
           <div className="shrink-0 mr-1">
             <div className="size-8 rounded-full bg-foreground/10 hover:bg-foreground/20 flex items-center justify-center transition-colors">
               {data.isPlaying ? (
@@ -177,13 +137,10 @@ export function SpotifyNowPlaying() {
           </div>
         </a>
 
-        {/* Progress Bar - Shows current progress */}
-        {data.duration && (
-          <div className="relative w-full h-1 bg-muted/50">
-            <div 
-              className={`h-full bg-foreground ${data.isPlaying ? 'transition-all duration-1000' : 'transition-all duration-300'}`}
-              style={{ width: `${Math.min(progressPercent, 100)}%` }}
-            />
+        {/* Scrobbling indicator bar */}
+        {data.isPlaying && (
+          <div className="relative w-full h-0.5 bg-muted/50 overflow-hidden">
+            <div className="h-full bg-[#d51007] animate-scrobble" />
           </div>
         )}
       </div>

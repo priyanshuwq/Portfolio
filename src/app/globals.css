@@ -216,3 +216,14 @@ canvas {
   animation: marquee-rtl 10s linear infinite;
   will-change: transform;
 }
+
+@keyframes scrobble-slide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+.animate-scrobble {
+  animation: scrobble-slide 2s ease-in-out infinite;
+  width: 25%;
+}
+

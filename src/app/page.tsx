@@ -20,7 +20,7 @@ import Image from "next/image";
 import React, { Suspense, lazy } from "react";
 import { Card } from "@/components/ui/card";
 import { SkillIcon } from "@/components/skill-icons";
-import { SpotifyNowPlaying } from "@/components/spotify-now-playing";
+import { MusicNowPlaying } from "@/components/music-now-playing";
 import { AnimatedTitle } from "@/components/animated-title";
 import { ToolsMarquee } from "@/components/tools-marquee";
 import { PfpAvatar } from "@/components/pfp-avatar";
@@ -78,9 +78,8 @@ export default function Page() {
               </div>
             </BlurFade>
 
-            {/* Name, Title, and Social Icons Row - Aligned to banner edges */}
-            <div className="flex items-start justify-between pt-14 sm:pt-20 mb-6">
-              {/* Name and Title */}
+            {/* Name & Title */}
+            <div className="pt-14 sm:pt-20 mb-6">
               <BlurFade delay={BLUR_FADE_DELAY * 2}>
                 <div className="space-y-0.5">
                   <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
@@ -88,54 +87,6 @@ export default function Page() {
                   </h1>
                   <AnimatedTitle />
                 </div>
-              </BlurFade>
-
-              {/* Social Icons - Aligned to right edge of banner */}
-              <BlurFade delay={BLUR_FADE_DELAY * 2.5}>
-                <TooltipProvider>
-                  <div className="flex flex-row gap-0">
-                    {Object.entries(DATA.contact.social)
-                      .filter(([_, social]) => social.navbar)
-                      .map(([name, social]) => (
-                        <Tooltip key={name}>
-                          <TooltipTrigger asChild>
-                            <Link
-                              href={social.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <Button variant="ghost" size="icon" className="size-8 rounded-lg hover:bg-muted">
-                                {React.createElement(social.icon, {
-                                  className: "size-4",
-                                })}
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="font-medium">{name}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      ))}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Link
-                          href={`mailto:${DATA.contact.email}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <Button variant="ghost" size="icon" className="size-8 rounded-lg hover:bg-muted">
-                            {React.createElement(DATA.contact.social.email.icon, {
-                              className: "size-4",
-                            })}
-                          </Button>
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="font-medium">Email</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                </TooltipProvider>
               </BlurFade>
             </div>
 
@@ -202,7 +153,7 @@ export default function Page() {
 
             {/* Buttons */}
             <BlurFade delay={BLUR_FADE_DELAY * 4}>
-              <div className="flex flex-col gap-2 mt-6">
+              <div className="flex flex-col gap-4 mt-6">
                 <div className="flex gap-2">
                   <Link href="/resume/Priyanshu_Resume.pdf?v=2" target="_blank">
                     <Button variant="outline" className="gap-2 h-9 text-sm">
@@ -217,14 +168,60 @@ export default function Page() {
                     </Button>
                   </Link>
                 </div>
+
+                {/* Social Icons */}
+                <TooltipProvider>
+                  <div className="flex flex-row gap-1">
+                    {Object.entries(DATA.contact.social)
+                      .filter(([_, social]) => social.navbar)
+                      .map(([name, social]) => (
+                        <Tooltip key={name}>
+                          <TooltipTrigger asChild>
+                            <Link
+                              href={social.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button variant="ghost" size="icon" className="size-9 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+                                {React.createElement(social.icon, {
+                                  className: "size-[18px]",
+                                })}
+                              </Button>
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="font-medium">{name}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      ))}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link
+                          href={`mailto:${DATA.contact.email}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="ghost" size="icon" className="size-9 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+                            {React.createElement(DATA.contact.social.email.icon, {
+                              className: "size-[18px]",
+                            })}
+                          </Button>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="font-medium">Email</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </TooltipProvider>
               </div>
             </BlurFade>
           </div>
 
-          {/* Spotify Now Playing - Full Width */}
+          {/* Music Now Playing */}
           <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
             <div className="mt-6">
-              <SpotifyNowPlaying />
+              <MusicNowPlaying />
             </div>
           </BlurFade>
         </div>
@@ -295,7 +292,7 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY * 14}>
             <div className="flex flex-col md:flex-row gap-8 items-start max-w-[800px] mx-auto">
               {/* Profile Image */}
-              <div className="shrink-0">
+              <div className="shrink-0 mx-auto md:mx-0">
                 <div className="w-56 h-56 rounded-2xl overflow-visible relative">
                   <ParticleImage
                     src="/herosection/profile.svg"
@@ -377,18 +374,36 @@ export default function Page() {
             </div>
           </BlurFade>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {DATA.blogs.slice(0, 2).map((blog, id) => (
+          <div className="divide-y divide-border/50 rounded-lg border border-border/40 overflow-hidden">
+            {DATA.blogs.slice(0, 4).map((blog, id) => (
               <BlurFade key={blog.title} delay={BLUR_FADE_DELAY * 18 + id * 0.05}>
-                <BlogCard
-                  title={blog.title}
-                  description={blog.description}
-                  date={blog.date}
-                  tags={blog.tags}
-                  image={blog.image}
-                  status={blog.status}
-                  href={blog.href}
-                />
+                {blog.href ? (
+                  <Link href={blog.href} target="_blank" className="group flex items-start justify-between gap-4 px-4 py-3.5 hover:bg-muted/40 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                        <span className="text-sm font-medium text-foreground/90 group-hover:text-foreground leading-snug">{blog.title}</span>
+                        {blog.status === "upcoming" && (
+                          <span className="text-[9px] font-medium border border-border rounded px-1.5 py-0.5 text-muted-foreground uppercase tracking-wide">soon</span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{blog.description}</p>
+                    </div>
+                    <span className="text-xs text-muted-foreground shrink-0 pt-0.5 tabular-nums">{blog.date}</span>
+                  </Link>
+                ) : (
+                  <div className="flex items-start justify-between gap-4 px-4 py-3.5">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                        <span className="text-sm font-medium text-foreground/90 leading-snug">{blog.title}</span>
+                        {blog.status === "upcoming" && (
+                          <span className="text-[9px] font-medium border border-border rounded px-1.5 py-0.5 text-muted-foreground uppercase tracking-wide">soon</span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{blog.description}</p>
+                    </div>
+                    <span className="text-xs text-muted-foreground shrink-0 pt-0.5 tabular-nums">{blog.date}</span>
+                  </div>
+                )}
               </BlurFade>
             ))}
           </div>

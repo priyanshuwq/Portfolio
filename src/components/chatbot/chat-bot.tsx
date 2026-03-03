@@ -55,12 +55,28 @@ export function ChatBot() {
     }
   }, [messages, isOpen]);
 
-  // Listen for custom event to toggle chatbot
+  // Listen for custom event to toggle chatbot (optionally with a pre-filled query)
   useEffect(() => {
-    const handleToggleChatbot = () => {
-      setIsOpen((prev) => !prev);
+    const handleToggleChatbot = (e: Event) => {
+      const detail = (e as CustomEvent<{ query?: string }>).detail;
+      const prefillQuery = detail?.query?.trim();
+
+      setIsOpen((prev) => {
+        // If opening with a pre-filled query, inject it after the chatbot opens
+        if (!prev && prefillQuery) {
+          setTimeout(() => {
+            setInput(prefillQuery);
+            // Auto-submit after another tick so state flushes
+            setTimeout(() => {
+              const form = document.querySelector<HTMLFormElement>('[data-chatbot-form]');
+              form?.requestSubmit();
+            }, 50);
+          }, 100);
+        }
+        return !prev;
+      });
     };
-    
+
     window.addEventListener('toggle-chatbot', handleToggleChatbot);
     return () => window.removeEventListener('toggle-chatbot', handleToggleChatbot);
   }, []);
@@ -408,6 +424,7 @@ export function ChatBot() {
             {/* Input */}
             <form
               id="chat-form"
+              data-chatbot-form
               onSubmit={handleSubmit}
               className="flex items-center gap-2 border-t p-4"
             >

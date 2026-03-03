@@ -51,7 +51,7 @@ export default function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:bottom-[-2px] after:left-0 after:h-[1px] after:w-0 after:bg-foreground after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {item.label}
                 </Link>

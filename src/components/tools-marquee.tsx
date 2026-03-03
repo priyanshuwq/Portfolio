@@ -165,8 +165,8 @@ export function ToolsMarquee() {
             { label: "Infra & Tools",  items: categorizedTech.infra },
             { label: "APIs",           items: categorizedTech.tools },
           ] as { label: string; items: { name: string }[] }[]).map(({ label, items }) => (
-            <div key={label} className="flex gap-4 text-sm">
-              <span className="w-28 shrink-0 text-xs text-muted-foreground pt-0.5">{label}</span>
+            <div key={label} className="flex flex-col sm:flex-row gap-1 sm:gap-4 text-sm pb-1">
+              <span className="sm:w-28 sm:shrink-0 text-xs font-semibold text-muted-foreground sm:pt-0.5">{label}</span>
               <span className="text-foreground/80 leading-relaxed">
                 {items.map((t, i) => (
                   <span key={t.name}>

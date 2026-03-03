@@ -85,10 +85,23 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  
+  const [windowWidth, setWindowWidth] = useState(0);
+
   useEffect(() => {
     setMounted(true);
+    const update = () => setWindowWidth(window.innerWidth);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
+
+  // Responsive block size so the calendar fills width without horizontal scroll
+  const { blockSize, blockMargin, showLegend } = useMemo(() => {
+    if (windowWidth < 400) return { blockSize: 5, blockMargin: 2, showLegend: false };
+    if (windowWidth < 540) return { blockSize: 7, blockMargin: 3, showLegend: false };
+    if (windowWidth < 768) return { blockSize: 9, blockMargin: 3, showLegend: true };
+    return { blockSize: 12, blockMargin: 4, showLegend: true };
+  }, [windowWidth]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -160,43 +173,20 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
               overflow: visible !important;
             }
             
-            /* Mobile & Tablet: enable horizontal scroll, hide scrollbar */
-            @media (max-width: 1024px) {
-              .github-calendar-wrapper {
-                overflow-x: auto;
-                overflow-y: hidden;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none; /* Firefox */
-                -ms-overflow-style: none; /* IE and Edge */
-              }
-              .github-calendar-wrapper::-webkit-scrollbar {
-                display: none; /* Chrome, Safari, Opera */
-              }
-              .react-activity-calendar text {
-                font-size: 11px !important;
-              }
-              .react-activity-calendar {
-                font-size: 13px !important;
-              }
+            /* Full-width calendar — no horizontal scroll on any screen */
+            .github-calendar-wrapper {
+              width: 100%;
             }
-            
-            /* Desktop: Properly handle overflow */
-            @media (min-width: 1025px) {
-              .github-calendar-wrapper {
-                overflow: visible !important;
-              }
-              .react-activity-calendar__scroll-container {
-                overflow: visible !important;
-              }
-              .react-activity-calendar text {
-                font-size: 11px !important;
-              }
-              .react-activity-calendar {
-                font-size: 13px !important;
-              }
-              .react-activity-calendar svg {
-                overflow: visible !important;
-              }
+            .react-activity-calendar {
+              width: 100% !important;
+              font-size: 11px !important;
+            }
+            .react-activity-calendar svg {
+              width: 100% !important;
+              overflow: visible !important;
+            }
+            .react-activity-calendar text {
+              font-size: 10px !important;
             }
           `}</style>
 
@@ -222,15 +212,15 @@ export function GitHubContributions({ username, className, onTotalLoad }: GitHub
               <div className="github-calendar-wrapper">
                 <ActivityCalendar
                   data={calendarData}
-                  blockSize={12}
-                  blockMargin={4}
+                  blockSize={blockSize}
+                  blockMargin={blockMargin}
                   colorScheme={resolvedTheme === "dark" ? "dark" : "light"}
                   theme={{
                     light: githubTheme.light,
                     dark: githubTheme.dark,
                   }}
                   showTotalCount={false}
-                  showColorLegend
+                  showColorLegend={showLegend}
                   showMonthLabels
                   labels={{
                     totalCount: "Total contributions in the last year",

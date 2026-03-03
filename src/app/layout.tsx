@@ -1,6 +1,5 @@
 import Navbar from "@/components/navbar";
 import { SimpleFooter } from "@/components/simple-footer";
-import { ChatBot } from "@/components/chatbot/chat-bot";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
@@ -195,7 +194,6 @@ export default function RootLayout({
               </div>
             </main>
             <SimpleFooter />
-            <ChatBot />
           </TooltipProvider>
         </ThemeProvider>
       </body>

@@ -63,8 +63,8 @@ export interface Contact {
   social: Record<string, SocialLink>;
 }
 
-// Spotify types
-export interface SpotifyTrack {
+// Music / Now Playing types
+export interface MusicTrack {
   isPlaying: boolean;
   title?: string;
   artist?: string;

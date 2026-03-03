@@ -1,8 +1,8 @@
 // Dynamic data fetcher with caching for chatbot
-import { getNowPlaying, getRecentlyPlayed } from './spotify';
+import { getNowScrobbling } from './lastfm';
 
 interface CachedData {
-  spotify: any | null;
+  music: any | null;
   github: any | null;
   visitors: any | null;
   timestamp: number;
@@ -11,7 +11,7 @@ interface CachedData {
 // Cache for 5 minutes
 const CACHE_DURATION = 5 * 60 * 1000;
 let dataCache: CachedData = {
-  spotify: null,
+  music: null,
   github: null,
   visitors: null,
   timestamp: 0,
@@ -22,64 +22,20 @@ const isCacheValid = () => {
   return Date.now() - dataCache.timestamp < CACHE_DURATION;
 };
 
-// Fetch Spotify data (current or recent track)
-export async function getSpotifyData() {
-  // Return cached data if valid
-  if (isCacheValid() && dataCache.spotify) {
-    return dataCache.spotify;
+// Fetch Last.fm data (current or recent scrobble)
+export async function getMusicData() {
+  if (isCacheValid() && dataCache.music) {
+    return dataCache.music;
   }
 
   try {
-    const response = await getNowPlaying();
-    
-    // If playing something
-    if (response.status === 200) {
-      const data = await response.json();
-      const track = data.item;
-      
-      const spotifyData = {
-        isPlaying: data.is_playing,
-        title: track.name,
-        artist: track.artists.map((a: any) => a.name).join(', '),
-        album: track.album.name,
-        songUrl: track.external_urls.spotify,
-        albumImageUrl: track.album.images[0]?.url,
-        progress: data.progress_ms,
-        duration: track.duration_ms,
-      };
-      
-      dataCache.spotify = spotifyData;
-      dataCache.timestamp = Date.now();
-      return spotifyData;
-    }
-    
-    // Nothing playing, get recently played
-    const recentResponse = await getRecentlyPlayed();
-    if (recentResponse.status === 200) {
-      const recentData = await recentResponse.json();
-      
-      if (recentData.items?.length > 0) {
-        const track = recentData.items[0].track;
-        
-        const spotifyData = {
-          isPlaying: false,
-          title: track.name,
-          artist: track.artists.map((a: any) => a.name).join(', '),
-          album: track.album.name,
-          songUrl: track.external_urls.spotify,
-          albumImageUrl: track.album.images[0]?.url,
-          playedAt: recentData.items[0].played_at,
-        };
-        
-        dataCache.spotify = spotifyData;
-        dataCache.timestamp = Date.now();
-        return spotifyData;
-      }
-    }
-    
-    return null;
+    const track = await getNowScrobbling();
+    if (!track) return null;
+    dataCache.music = track;
+    dataCache.timestamp = Date.now();
+    return track;
   } catch (error) {
-    console.error('[Dynamic Data] Spotify error:', error);
+    console.error('[Dynamic Data] Last.fm error:', error);
     return null;
   }
 }
@@ -224,14 +180,14 @@ export async function getVisitorData() {
 
 // Get all dynamic data at once
 export async function getAllDynamicData() {
-  const [spotify, github, visitors] = await Promise.allSettled([
-    getSpotifyData(),
+  const [music, github, visitors] = await Promise.allSettled([
+    getMusicData(),
     getGitHubData(),
     getVisitorData(),
   ]);
   
   return {
-    spotify: spotify.status === 'fulfilled' ? spotify.value : null,
+    music: music.status === 'fulfilled' ? music.value : null,
     github: github.status === 'fulfilled' ? github.value : null,
     visitors: visitors.status === 'fulfilled' ? visitors.value : null,
   };
@@ -239,24 +195,23 @@ export async function getAllDynamicData() {
 
 // Format dynamic data for AI context
 export function formatDynamicDataForAI(data: {
-  spotify: any;
+  music: any;
   github: any;
   visitors: any;
 }) {
   let context = '\n\n## Real-Time Data (Last Updated: ' + new Date().toLocaleString() + ')\n\n';
   
-  // Spotify
-  if (data.spotify) {
-    context += '### Current Music Activity\n';
-    if (data.spotify.isPlaying) {
-      context += `- Currently listening to: **${data.spotify.title}** by ${data.spotify.artist}\n`;
-      context += `- Album: ${data.spotify.album}\n`;
-      context += `- Listen: [${data.spotify.title}](${data.spotify.songUrl})\n`;
+  // Last.fm / Music
+  if (data.music) {
+    context += '### Current Music Activity (via Last.fm)\n';
+    if (data.music.isPlaying) {
+      context += `- Currently scrobbling: **${data.music.title}** by ${data.music.artist}\n`;
+      context += `- Album: ${data.music.album}\n`;
+      context += `- [View on Last.fm](${data.music.songUrl})\n`;
     } else {
-      context += `- Last played: **${data.spotify.title}** by ${data.spotify.artist}\n`;
-      if (data.spotify.playedAt) {
-        const playedDate = new Date(data.spotify.playedAt);
-        context += `- Played at: ${playedDate.toLocaleString()}\n`;
+      context += `- Last scrobbled: **${data.music.title}** by ${data.music.artist}\n`;
+      if (data.music.playedAt) {
+        context += `- Scrobbled at: ${data.music.playedAt}\n`;
       }
     }
     context += '\n';

@@ -240,9 +240,9 @@ export function ProjectCard({
           {slug ? (
             <Link 
               href={`/projects/${slug}`}
-              className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+              className="group/vd flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
             >
-              <span className="font-medium">View Details</span>
+              <span className="font-medium relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 after:bg-foreground after:transition-all after:duration-300 group-hover/vd:after:w-full">View Details</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
