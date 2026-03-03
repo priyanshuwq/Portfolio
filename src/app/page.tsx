@@ -412,28 +412,7 @@ export default function Page() {
 
       <ContactSection />
 
-      {/* Spotify Playlist */}
-      {/* <section id="spotify">
-        <div className="w-full py-1">
-          <BlurFade delay={BLUR_FADE_DELAY * 17}>
-            <h2 className="text-xl font-bold mb-4">Playlist</h2>
-          </BlurFade>
-          <BlurFade delay={BLUR_FADE_DELAY * 17.5}>
-          <div className="rounded-xl overflow-hidden border border-border shadow-lg">
-            <iframe
-              src="https://open.spotify.com/embed/playlist/62767ucbiIBcDMOIxSNwjB?utm_source=generator&theme=0"
-              width="100%"
-              height="152"
-              frameBorder="0"
-              allowFullScreen
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-              style={{ borderRadius: '12px' }}
-            />
-          </div>
-          </BlurFade>
-        </div>
-      </section> */}
+
 
     </main>
   );

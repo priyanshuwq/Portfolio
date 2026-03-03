@@ -101,7 +101,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="hsl(var(--background))" />
-        <link rel="preconnect" href="https://api.spotify.com" />
         <link rel="preconnect" href="https://api.github.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://cal.com" />

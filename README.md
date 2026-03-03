@@ -9,7 +9,7 @@ A minimal, blazing-fast portfolio website built with modern web technologies.
 - Beautiful UI with shadcn/ui components
 -  Lightning-fast performance with Next.js 16
 -  Smooth animations powered by Framer Motion
--  Live Spotify integration
+-  Live Last.fm music integration
 -  Fully responsive design
 -  Dark/Light theme with advanced transitions
 -  Keyboard shortcuts for quick navigation
@@ -69,10 +69,10 @@ No need to modify components—everything is data-driven!
 Create a `.env.local` file for optional integrations:
 
 ```bash
-# Spotify Integration
-SPOTIFY_CLIENT_ID=your_client_id
-SPOTIFY_CLIENT_SECRET=your_client_secret
-SPOTIFY_REFRESH_TOKEN=your_refresh_token
+# Last.fm Music Integration
+LASTFM_API_KEY=your_lastfm_api_key
+LASTFM_API_SECRET=your_lastfm_api_secret
+LASTFM_USERNAME=your_lastfm_username
 
 # GitHub Contributions
 GITHUB_CONTRIB_TOKEN=your_github_token
