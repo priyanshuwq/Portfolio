@@ -47,6 +47,12 @@ export const metadata: Metadata = {
     "Portfolio",
     "Shekhr Portfolio",
     "Shekhr Dev Projects",
+    // Project titles
+    ...DATA.projects.map((p) => p.title),
+    ...DATA.projects.map((p) => `${p.title} by Priyanshu`),
+    ...DATA.projects.map((p) => `${p.title} Shekhr Dev`),
+    // All unique technologies across every project
+    ...Array.from(new Set(DATA.projects.flatMap((p) => [...p.technologies]))),
   ],
   authors: [{ name: DATA.name }],
   creator: DATA.name,
@@ -55,7 +61,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://shekhr.dev",
     title: DATA.name,
-    description: "I'm a FullStack Developer, I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
+    description: "Priyanshu Shekhar Singh (Shekhr Dev) — Full-Stack Developer. Creator of Audora (real-time music streaming), VibeChat (encrypted chat), Authentiscan (certificate verification), and more. Currently building ReviewHub and Suburbia. React · Next.js · TypeScript · WebRTC · GSAP.",
     siteName: DATA.name,
     images: [
       {
@@ -69,7 +75,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: DATA.name,
-    description: "I'm a FullStack Developer, I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
+    description: "Priyanshu Shekhar Singh (Shekhr Dev) — Full-Stack Developer. Creator of Audora, VibeChat, Authentiscan, Porsche-911 3D. Currently building ReviewHub and Suburbia. React · Next.js · TypeScript · WebRTC · GSAP.",
     creator: "@priyanshuwq",
     images: ["/herosection/preview.png"],
   },
@@ -108,6 +114,52 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://cal.com" />
         <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
         
+        {/* JSON-LD Structured Data for Projects ItemList */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              name: "Projects by Priyanshu Shekhar Singh",
+              description: "Portfolio projects built by Priyanshu Shekhar Singh (Shekhr Dev) — Full-Stack Developer",
+              url: "https://shekhr.dev/projects",
+              numberOfItems: DATA.projects.length,
+              itemListElement: DATA.projects.map((project, index) => {
+                const websiteHref = project.links.find((l) => l.type === "Website")?.href;
+                const sourceHref = project.links.find((l) => l.type === "Source")?.href;
+                const portfolioUrl = `https://shekhr.dev/projects/${project.slug}`;
+                return {
+                  "@type": "ListItem",
+                  position: index + 1,
+                  item: {
+                    "@type": "SoftwareApplication",
+                    name: project.title,
+                    description: project.description,
+                    url: portfolioUrl,
+                    ...(websiteHref && websiteHref !== "#" ? { sameAs: websiteHref } : {}),
+                    ...(sourceHref && sourceHref !== "#" ? { codeRepository: sourceHref } : {}),
+                    applicationCategory: "WebApplication",
+                    operatingSystem: "Web Browser",
+                    author: {
+                      "@type": "Person",
+                      name: "Priyanshu Shekhar Singh",
+                      url: "https://shekhr.dev",
+                    },
+                    keywords: [...project.technologies].join(", "),
+                    datePublished: project.dates,
+                    offers: {
+                      "@type": "Offer",
+                      price: "0",
+                      priceCurrency: "USD",
+                    },
+                  },
+                };
+              }),
+            }),
+          }}
+        />
+
         {/* JSON-LD Structured Data for Person Schema */}
         <script
           type="application/ld+json"
@@ -116,11 +168,11 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Priyanshu Shekhar Singh",
-              alternateName: ["Priyanshu", "Shekhr", "Shekhr Dev", "priyanshuwq"],
+              alternateName: ["Priyanshu", "Shekhr", "Shekhr Dev", "priyanshuwq", "DevShekhar"],
               url: "https://shekhr.dev",
               image: "https://shekhr.dev/herosection/profile.png",
               jobTitle: "Full-Stack Web Developer",
-              description: "Full-Stack Developer, I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
+              description: "Priyanshu Shekhar Singh, known online as Shekhr Dev and priyanshuwq, is a Full-Stack Developer from India. He builds interactive web experiences using React, Next.js, TypeScript, Node.js, WebRTC, and GSAP. His notable projects include Audora (real-time collaborative music streaming platform at audora.rocks), VibeChat (end-to-end encrypted real-time chat app at chat.shekhr.dev), Authentiscan (certificate verification and issuance platform), and Porsche-911 3D (an immersive Three.js car showcase). He is currently building ReviewHub (a modern review platform) and Suburbia (a 3D skateboarding game in Three.js). Open source contributor and active on GitHub as priyanshuwq.",
               email: "priyanshuofficial2004@gmail.com",
               sameAs: [
                 "https://github.com/priyanshuwq",
@@ -128,6 +180,7 @@ export default function RootLayout({
                 "https://x.com/priyanshuwq",
                 "https://www.reddit.com/user/priyanshuwq",
                 "https://cal.com/priyanshuwq",
+                "https://www.last.fm/user/priynshuwq",
               ],
               knowsAbout: [
                 "React",
@@ -150,6 +203,27 @@ export default function RootLayout({
                 "@type": "Organization",
                 name: "Independent Developer",
               },
+              hasCreatedWork: DATA.projects.map((project) => {
+                const websiteHref = project.links.find((l) => l.type === "Website")?.href;
+                const sourceHref = project.links.find((l) => l.type === "Source")?.href;
+                return {
+                  "@type": "SoftwareApplication",
+                  name: project.title,
+                  description: project.description,
+                  url: `https://shekhr.dev/projects/${project.slug}`,
+                  ...(websiteHref && websiteHref !== "#" ? { sameAs: websiteHref } : {}),
+                  ...(sourceHref && sourceHref !== "#" ? { codeRepository: sourceHref } : {}),
+                  applicationCategory: "WebApplication",
+                  keywords: [...project.technologies].join(", "),
+                  datePublished: project.dates,
+                  creativeWorkStatus: project.active ? "Published" : "InDevelopment",
+                  author: {
+                    "@type": "Person",
+                    name: "Priyanshu Shekhar Singh",
+                    url: "https://shekhr.dev",
+                  },
+                };
+              }),
             }),
           }}
         />

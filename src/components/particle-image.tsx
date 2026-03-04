@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 
 interface ParticleImageProps {
   src: string;
+  imageSrc?: string;
   width?: number;
   height?: number;
   className?: string;
@@ -17,11 +18,15 @@ class Particle {
   originY: number;
   char: string;
   density: number;
+  color: string;
+  vx: number = 0;
+  vy: number = 0;
 
-  constructor(char: string, baseX: number, baseY: number, canvasWidth: number, canvasHeight: number) {
+  constructor(char: string, baseX: number, baseY: number, canvasWidth: number, canvasHeight: number, color: string) {
     this.char = char;
     this.originX = baseX;
     this.originY = baseY;
+    this.color = color;
 
     // Initial spawn effect scattering from outer ring inwards
     const centerX = canvasWidth / 2;
@@ -40,33 +45,41 @@ class Particle {
     const dy = mouse.y - this.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
+    // Spring force to return to origin
+    const dxOrigin = this.originX - this.x;
+    const dyOrigin = this.originY - this.y;
+
+    this.vx += dxOrigin * 0.08;
+    this.vy += dyOrigin * 0.08;
+
     if (distance < mouse.radius) {
       const norm_x = dx / distance;
       const norm_y = dy / distance;
       const force = (mouse.radius - distance) / mouse.radius;
-      // Add a tangential swirl force + radial push
+
+      // Swirl and push
       const swirl_x = norm_y;
       const swirl_y = -norm_x;
 
-      const push_x = (norm_x + swirl_x * 2.5) * force * this.density * 2.0;
-      const push_y = (norm_y + swirl_y * 2.5) * force * this.density * 2.0;
-
-      this.x -= push_x;
-      this.y -= push_y;
-    } else {
-      // Return to original quickly and smoothly
-      const easeSpeed = this.density * 0.9;
-      if (Math.abs(this.x - this.originX) > 0.05) this.x -= (this.x - this.originX) / easeSpeed;
-      if (Math.abs(this.y - this.originY) > 0.05) this.y -= (this.y - this.originY) / easeSpeed;
+      this.vx -= (norm_x + swirl_x * 1.5) * force * (this.density * 0.5);
+      this.vy -= (norm_y + swirl_y * 1.5) * force * (this.density * 0.5);
     }
+
+    // Friction
+    this.vx *= 0.85;
+    this.vy *= 0.85;
+
+    this.x += this.vx;
+    this.y += this.vy;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
+    ctx.fillStyle = this.color;
     ctx.fillText(this.char, this.x, this.y);
   }
 }
 
-export function ParticleImage({ src, width = 224, height = 224, className = "" }: ParticleImageProps) {
+export function ParticleImage({ src, imageSrc, width = 224, height = 224, className = "" }: ParticleImageProps) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -85,37 +98,69 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    fetch(src)
-      .then(res => res.text())
-      .then(svgText => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(svgText, "image/svg+xml");
-        const svgNode = doc.querySelector("svg");
-        const vb = svgNode?.getAttribute("viewBox")?.split(" ") || ["0", "0", "400", "399"];
-        const vbWidth = parseFloat(vb[2]);
-        const vbHeight = parseFloat(vb[3]);
+    const imgSrc = imageSrc || src.replace('.svg', '.png');
 
-        // Ensure scale is computed cleanly representing layout dimensions
-        const scale = Math.min(width / vbWidth, height / vbHeight);
-        const offsetX = (width - vbWidth * scale) / 2;
-        const offsetY = (height - vbHeight * scale) / 2;
+    Promise.all([
+      fetch(src).then(res => res.text()),
+      new Promise<HTMLImageElement>((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = imgSrc;
+      })
+    ]).then(([svgText, loadedImage]) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(svgText, "image/svg+xml");
+      const svgNode = doc.querySelector("svg");
+      const vb = svgNode?.getAttribute("viewBox")?.split(" ") || ["0", "0", "400", "399"];
+      const vbWidth = parseFloat(vb[2]);
+      const vbHeight = parseFloat(vb[3]);
 
-        const texts = doc.querySelectorAll("text");
-        const particles: Particle[] = [];
+      // Ensure scale is computed cleanly representing layout dimensions
+      const scale = Math.min(width / vbWidth, height / vbHeight);
+      const offsetX = (width - vbWidth * scale) / 2;
+      const offsetY = (height - vbHeight * scale) / 2;
 
-        // Only register valid 1-char ascii particles
-        texts.forEach(node => {
-          const char = node.textContent?.trim();
-          if (char) {
-            const x = parseFloat(node.getAttribute("x") || "0");
-            const y = parseFloat(node.getAttribute("y") || "0");
-            particles.push(new Particle(char, (x * scale) + offsetX, (y * scale) + offsetY, width, height));
+      const offscreen = document.createElement("canvas");
+      offscreen.width = vbWidth;
+      offscreen.height = vbHeight;
+      const offCtx = offscreen.getContext("2d", { willReadFrequently: true });
+      if (offCtx) {
+        offCtx.drawImage(loadedImage, 0, 0, vbWidth, vbHeight);
+      }
+      const imgData = offCtx?.getImageData(0, 0, vbWidth, vbHeight).data;
+
+      const texts = doc.querySelectorAll("text");
+      const particles: Particle[] = [];
+
+      // Only register valid 1-char ascii particles
+      texts.forEach(node => {
+        const char = node.textContent?.trim();
+        if (char) {
+          const x = parseFloat(node.getAttribute("x") || "0");
+          const y = parseFloat(node.getAttribute("y") || "0");
+
+          let color = "#d4d4d4";
+          if (imgData) {
+            const px = Math.min(Math.floor(x), vbWidth - 1);
+            const py = Math.min(Math.floor(y), vbHeight - 1);
+            if (px >= 0 && py >= 0) {
+              const idx = (py * Math.floor(vbWidth) + Math.floor(px)) * 4;
+              const r = imgData[idx];
+              const g = imgData[idx + 1];
+              const b = imgData[idx + 2];
+              color = `rgb(${r}, ${g}, ${b})`;
+            }
           }
-        });
 
-        particlesRef.current = particles;
+          particles.push(new Particle(char, (x * scale) + offsetX, (y * scale) + offsetY, width, height, color));
+        }
       });
-  }, [src, width, height, mounted]);
+
+      particlesRef.current = particles;
+    });
+  }, [src, imageSrc, width, height, mounted]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -135,7 +180,6 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
     const isDark = resolvedTheme === "dark" || resolvedTheme === "system";
     const fillStyle = isDark ? "#d4d4d4" : "#525252";
     const particleAlpha = isDark ? 1 : 0.88;
-    const ringAlpha = isDark ? 0.4 : 0.3;
 
     // Adjust font scale relative to original viewBox height (399) vs physical canvas height (224)
     const fontScaleFactor = height / 399;
@@ -148,6 +192,7 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
 
       ctx.clearRect(0, 0, width, height);
       ctx.globalAlpha = particleAlpha;
+      // fillStyle for the ring cursor fallback
       ctx.fillStyle = fillStyle;
 
       ctx.font = `${fontSize}px monospace`;
@@ -158,19 +203,6 @@ export function ParticleImage({ src, width = 224, height = 224, className = "" }
         p.update(mouseRef.current);
         p.draw(ctx);
       });
-
-      // Draw visible cursor ring
-      const mouse = mouseRef.current;
-      if (mouse.x > -999) {
-        ctx.save();
-        ctx.globalAlpha = ringAlpha;
-        ctx.strokeStyle = fillStyle;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, currentRadiusRef.current, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-      }
 
       requestRef.current = requestAnimationFrame(animate);
     };
