@@ -380,28 +380,24 @@ export default function Page() {
                 {blog.href ? (
                   <Link href={blog.href} target="_blank" className="group flex items-start justify-between gap-4 px-4 py-3.5 hover:bg-muted/40 transition-colors">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                        <span className="text-sm font-medium text-foreground/90 group-hover:text-foreground leading-snug">{blog.title}</span>
-                        {blog.status === "upcoming" && (
-                          <span className="text-[9px] font-medium border border-border rounded px-1.5 py-0.5 text-muted-foreground uppercase tracking-wide"></span>
-                        )}
-                      </div>
+                      <p className="text-sm font-medium text-foreground/90 group-hover:text-foreground leading-snug mb-0.5">{blog.title}</p>
                       <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{blog.description}</p>
                     </div>
                     <span className="text-xs text-muted-foreground shrink-0 pt-0.5 tabular-nums">{blog.date}</span>
                   </Link>
                 ) : (
-                  <div className="flex items-start justify-between gap-4 px-4 py-3.5">
+                  <div className="flex items-start justify-between gap-4 px-4 py-3.5 opacity-60">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                        <span className="text-sm font-medium text-foreground/90 leading-snug">{blog.title}</span>
-                        {blog.status === "upcoming" && (
-                          <span className="text-[9px] font-medium border border-border rounded px-1.5 py-0.5 text-muted-foreground uppercase tracking-wide">soon</span>
-                        )}
-                      </div>
+                      <p className="text-sm font-medium text-foreground/90 leading-snug mb-0.5">{blog.title}</p>
                       <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{blog.description}</p>
                     </div>
-                    <span className="text-xs text-muted-foreground shrink-0 pt-0.5 tabular-nums">{blog.date}</span>
+                    {blog.status === "upcoming" ? (
+                      <span className="shrink-0 pt-0.5 text-[10px] font-medium border border-dashed border-border rounded-full px-2.5 py-0.5 text-muted-foreground tracking-wide uppercase whitespace-nowrap">
+                        Coming soon
+                      </span>
+                    ) : (
+                      <span className="text-xs text-muted-foreground shrink-0 pt-0.5 tabular-nums">{blog.date}</span>
+                    )}
                   </div>
                 )}
               </BlurFade>
