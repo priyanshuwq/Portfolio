@@ -10,16 +10,18 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://shekhr.dev"),
   title: {
-    default: "Priyanshu Shekhar Singh | Full-Stack Developer & Open Source Contributor",
+    default: "Priyanshu Shekhar Singh",
     template: `%s | ${DATA.name}`,
   },
-  description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
+  description: "I'm a FullStack Developer, I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
   keywords: [
     "Priyanshu Shekhar Singh",
     "Priyanshu Singh", 
     "Priyanshu",
     "Shekhr Dev",
     "Shekhr",
+    "Sehkhardev",
+    "devshekhar",
     "priyanshuwq",
     "Full-Stack Developer",
     "FullStack Developer India",
@@ -53,7 +55,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://shekhr.dev",
     title: DATA.name,
-    description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
+    description: "I'm a FullStack Developer, I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
     siteName: DATA.name,
     images: [
       {
@@ -67,7 +69,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: DATA.name,
-    description: "I'm a FullStack Developer and Open Source Contributor. I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
+    description: "I'm a FullStack Developer, I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
     creator: "@priyanshuwq",
     images: ["/herosection/preview.png"],
   },
@@ -118,7 +120,7 @@ export default function RootLayout({
               url: "https://shekhr.dev",
               image: "https://shekhr.dev/herosection/profile.png",
               jobTitle: "Full-Stack Web Developer",
-              description: "Full-Stack Developer and Open Source Contributor specializing in React, Next.js, and TypeScript. Building interactive web experiences and products.",
+              description: "Full-Stack Developer, I love building Interactive web experiences and products to solve real-world problems. Explore my projects, experience and technical expertise.",
               email: "priyanshuofficial2004@gmail.com",
               sameAs: [
                 "https://github.com/priyanshuwq",
